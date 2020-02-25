@@ -1,6 +1,6 @@
 <template>
   <div class="mainbox">
-   这里是首页！
+   这里是添加页面！
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: ''
     }
   }
 }
@@ -17,9 +17,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
-.hello{
-  width: 750px;
-  height: 400px;
-  background:red;
-}
+
 </style>

@@ -15,6 +15,9 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  externals: {
+    'AMap': 'AMap'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -31,6 +34,10 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.less$/,
+        loader: "style-loader!css-loader!less-loader"
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',

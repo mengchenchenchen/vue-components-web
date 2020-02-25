@@ -10,6 +10,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "element-ui": "^2.13.0",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
+    "postcss-pxtorem": "^4.0.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

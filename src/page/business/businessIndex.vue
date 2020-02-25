@@ -1,6 +1,7 @@
+
 <template>
   <div class="mainbox">
-   这里是首页！
+   这里是商业首页！
   </div>
 </template>
 
