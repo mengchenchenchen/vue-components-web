@@ -5,8 +5,11 @@ import App from './App'
 import router from './router'
 import './rem'
 import ElementUI from 'element-ui';
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+Vue.use(MintUI);
 
 Vue.config.productionTip = false
 

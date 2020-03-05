@@ -1,98 +1,365 @@
 <template>
-  <div class="mainbox">
-    <div class="header">
-      <div class="title">我的订单</div>
-    </div>
-    <div class="adressItem" v-for="(item, index) in orderList" :key="index">
-      <div class="adress">{{ item.address }}{{item.gate}}</div>
-      <div class="info">
-        <div class="name">{{ item.name }}</div>
-        <div class="link">{{ item.phone }}</div>
+  <div id="shopping_cart">
+    <el-container class="app_width">
+      <div class="header">
+        <div class="back">
+          <i class="el-icon-arrow-left" @click="back"></i>
+        </div>
+        <div class="order">订单</div>
+        <div @click="write" class="edit">{{msg}}</div>
       </div>
-    </div>
+
+      <div class="goods_list">
+        <img src="../../assets/nothingforcart.png" alt v-show="flag" />
+        <div class="goods_icon" v-show="goods" v-for="(i,index) in items" :key="index">
+          <div class="goods_title">
+            <el-row :gutter="0">
+              <el-col :span="2">
+                <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
+              </el-col>
+              <el-col :span="10">
+                <span>{{i.name}}</span>
+              </el-col>
+              <el-col :span="12">
+                <router-link
+                  :to="{
+						name:'goodsShow',
+						params:{
+						msg:'不包邮'
+						}
+					}"
+                >
+                  <span>{{i.postage}}</span>
+                  <i class="el-icon-arrow-right"></i>
+                </router-link>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="goods_dec">
+            <el-row :gutter="0">
+              <el-col :span="2">
+                <input type="checkbox" v-show="input" v-model="checked" />
+                <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
+              </el-col>
+              <el-col :span="6">
+                <img src="../../assets/shirt.jpg" alt />
+              </el-col>
+              <el-col :span="16">
+                <div class="goods_name">{{ i.names }}</div>
+                <div class="dec">
+                  <div class="size">
+                    <span>尺寸:{{ i.size }}</span>
+                    <span>颜色:{{i.color}}</span>
+                  </div>
+                  <div class="pay">
+                    <span v-show="many">&times;{{num}}</span>
+                    <span v-show="change">
+                      <table>
+                        <tr>
+                          <td @click="add(num)">+</td>
+                          <td>
+                            <input type="text" v-model="num" @keyup.13="search" />
+                          </td>
+                          <td @click="minus(num)">-</td>
+                        </tr>
+                      </table>
+                    </span>
+                    <span>&yen;{{i.money}}</span>
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </div>
+      <el-footer>
+      </el-footer>
+    </el-container>
+	<FooterItem></FooterItem>
   </div>
 </template>
 
 <script>
+import FooterItem from "../../components/footerbox";
+
 export default {
+  name: "shopping_cart",
+  components: {
+    FooterItem
+  },
   data() {
     return {
-      msg: "",
-      addressList: [
+      msg: "编辑",
+      flag: false,
+      goods: true,
+      input: true,
+      forb: false,
+      many: true,
+      checked: false,
+      change: false,
+      num: 1,
+      total: 0,
+      q1: -1,
+      items: [
         {
-          address: "江苏省徐州市丰县",
-          gate:'1504',
-          name: "liu梦晨",
-          phone: "18251723449"
-        },
-      ]
+          name: "免税自营",
+          postage: "不包邮,满1亿包邮",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        }
+      ],
+      adds: {
+        name: "免税自营",
+        postage: "不包邮,满1亿包邮",
+        names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+        size: "s",
+        color: "黑色",
+        money: 139
+      }
     };
-  },
-  mounted() {
-    let address = JSON.parse(sessionStorage.getItem('address'));
-    this.addressList.push(address);
   },
   methods: {
     back() {
-      this.$router.push({ path: "./customerIndex"});
+      this.$router.go(-1);
     },
-    addAddress() {
-      this.$router.push({ path: "./address" ,query:{msg:this.msg}});
+    write() {
+      if (this.msg == "编辑") {
+        this.msg = "完成";
+        this.input = false;
+        this.forb = true;
+        this.many = false;
+        this.change = true;
+      } else if (this.msg == "完成") {
+        this.msg = "编辑";
+        this.input = true;
+        this.forb = false;
+        this.many = true;
+        this.change = false;
+      }
     },
-    chooseAddress(item){
-        this.$router.push({ path: "./customerIndex" ,query:{sendmessage:this.item}});
-        // console.log(item)
+    addGoods() {
+      this.flag = false;
+      this.goods = true;
+      let AddGoods = this.adds;
+      this.items.push(AddGoods);
+    },
+    add(v) {
+      if (v >= 2) {
+        this.num = 2;
+        alert("您已经超过购买数量");
+      } else if (v < 2 && v >= 1) {
+        this.num += 1;
+      }
+      console.log(this.num);
+    },
+    minus(v) {
+      console.log(v);
+      if (v <= 1) {
+        alert("sorry,您必须买!");
+        this.num = 1;
+      } else if (v > 1 && v <= 2) {
+        this.num -= 1;
+      }
+    },
+    checkedAll(v) {
+      console.log(v);
+      this.items[v].checked = true;
+    },
+    del(index) {
+      this.items.splice(index, 1);
+      if (this.items.length == 0) {
+        this.flag = true;
+      }
     }
   }
 };
 </script>
 
 <style lang="less">
-html,
-body {
-  width: 100%;
-  height: 100%;
-  background-color: rgb(250, 248, 248);
+#shopping_cart {
+  .app_width {
+    .header {
+	  display: flex;
+	  padding: 20px 40px;
+      div {
+		flex: 1;
+	  }
+	  .back{
+		  box-sizing: border-box;
+		  padding-top: 8px;
+	  }
+	  .order{
+		  text-align: center;
+	  }
+	  .edit{
+		  text-align: right;
+	  }
+    }
+  }
 }
-.mainbox {
-  .header {
-    box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
-    font-size: 40px;
-    background-color: #fff;
-    color: black;
+.page {
+  border: none;
+}
+.el-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background-color: white;
+  padding: 20px;
+}
+.goods_news {
+  text-align: center;
+  font-weight: bold;
+  span {
+    display: inline-block;
+    padding-left: 10px;
+    width: 100px;
+    padding: 20px 0;
   }
-  .back {
-    background-color: #fff;
-    margin-top: -68px;
-    font-size: 40px;
-    margin-bottom: 40px;
-  }
-  .adressItem {
-    background-color: #fff;
-    box-sizing: border-box;
-    padding: 20px 40px;
-    margin-bottom: 20px;
-    .adress {
-      margin-bottom: 10px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .info {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-  .footer {
-    height: 80px;
-    line-height: 80px;
+}
+.goods_list {
+  background-color: #e7e7e7;
+  img {
     width: 100%;
-    background-color: rgb(64, 47, 219);
-    text-align: center;
+  }
+  .goods_icon {
+    margin-top: 10px;
+    background-color: white;
+    font-size: 14px;
+    .goods_title {
+      padding: 5px;
+      border-bottom: 4px solid #e7e7e7;
+      .el-col {
+        height: 30px;
+        padding: 0;
+      }
+      .el-col:first-child {
+        text-align: center;
+        input {
+          margin-top: 8px;
+        }
+      }
+      .el-col:nth-child(2) {
+        line-height: 30px;
+      }
+      .el-col:last-child {
+        padding: 0 10px;
+        text-align: right;
+        a {
+          color: #e7b801;
+          text-decoration: none;
+          line-height: 30px;
+        }
+      }
+    }
+    .goods_dec {
+      padding: 5px;
+      margin-bottom: 5px;
+      .el-col {
+        height: 100px;
+        font-size: 12px;
+      }
+      .el-col:first-child {
+        text-align: center;
+        input {
+          margin-top: 43px;
+        }
+        img {
+          margin-top: 30px;
+        }
+      }
+      .el-col:nth-child(2) {
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .el-col:last-child {
+        position: relative;
+        padding: 5px;
+        .dec {
+          position: absolute;
+          left: 5px;
+          bottom: 5px;
+          width: 95%;
+          display: flex;
+          justify-content: space-between;
+          .size {
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+          }
+          .pay {
+            font-size: 15px;
+            font-weight: bold;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+          }
+          table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            td {
+              padding: 2px;
+              border: 1px solid black;
+            }
+            input {
+              width: 30px;
+              border: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.add {
+  margin-top: 10px;
+  margin-bottom: 60px;
+  input {
+    width: 100%;
+    border: none;
+    background-color: #80c342;
+    border-radius: 5px;
+    padding: 10px 0;
     color: white;
+  }
+}
+.el-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+  .el-col {
+    height: 60px;
+  }
+  .el-col:first-child {
+    display: flex;
+    background-color: #f1e63b;
+    font-size: 14px;
+    .all_choose {
+      padding: 0 5px;
+      margin-right: 10px;
+      line-height: 60px;
+    }
+    .money {
+      text-align: left;
+      p:first-child {
+        margin-top: 12px;
+      }
+    }
+  }
+  .el-col:last-child {
+    background-color: #000000;
+    color: white;
+    font-size: 18px;
+    line-height: 60px;
   }
 }
 </style>

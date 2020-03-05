@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import  axios from 'axios'
 export default {
   data() {
     return {
@@ -35,8 +36,9 @@ export default {
     };
   },
   mounted() {
-    let address = JSON.parse(sessionStorage.getItem('address'));
-    this.addressList.push(address);
+    // let address = JSON.parse(sessionStorage.getItem('address'));
+    // this.addressList.push(address);
+    this.getList()
   },
   methods: {
     back() {
@@ -48,6 +50,11 @@ export default {
     chooseAddress(item){
         this.$router.push({ path: "./customerIndex" ,query:{sendmessage:this.item}});
         // console.log(item)
+    },
+    getList(){
+      axios.get('http://192.168.1.24/php-ci/index.php/test/lala').then(res=>{
+          console.log(res);
+      })
     }
   }
 };

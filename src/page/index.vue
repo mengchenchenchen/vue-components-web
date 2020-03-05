@@ -28,7 +28,7 @@ export default {
   },
   methods:{
       enterCus(){
-          this.$router.push({path:'/customerIndex'})
+          this.$router.push({path:'/Index'})
       },
       enterRider(){
           this.$router.push({path:'/businessIndex'})
@@ -40,7 +40,6 @@ export default {
 <style lang='less'>
 .mainbox{
     margin: 0;
-    padding:20px;
     .introduce{
         margin-top: 100px;
         margin-bottom: 20px;
