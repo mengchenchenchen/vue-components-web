@@ -1,81 +1,81 @@
 <template>
   <div id="shopping_cart">
     <el-container class="app_width">
-      <div class="header">
-        <div class="back">
-          <i class="el-icon-arrow-left" @click="back"></i>
-        </div>
-        <div class="order">订单</div>
+      <div class="tab">
+        <i class="el-icon-arrow-left" @click="back"></i>
+        <div class="bring">快递上门</div>
         <div @click="write" class="edit">{{msg}}</div>
       </div>
-
-      <div class="goods_list">
-        <img src="../../assets/nothingforcart.png" alt v-show="flag" />
-        <div class="goods_icon" v-show="goods" v-for="(i,index) in items" :key="index">
-          <div class="goods_title">
-            <el-row :gutter="0">
-              <el-col :span="2">
-                <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-              </el-col>
-              <el-col :span="10">
-                <span>{{i.name}}</span>
-              </el-col>
-              <el-col :span="12">
-                <router-link
-                  :to="{
+      <div class="table">
+        <div :class="{active : isActive == 0}" @click="isActive = 0">待接单</div>
+        <div :class="{active : isActive == 1}" @click="isActive = 1">送货中</div>
+        <div :class="{active : isActive == 2}" @click="isActive = 2">异常单</div>
+        <div :class="{active : isActive == 3}" @click="isActive = 3">已完成</div>
+      </div>
+      <!-- 待接单 -->
+      <div v-if="isActive == 0">
+        <div class="box">
+          <!-- 这里是待接单 -->
+          <div class="goods_list">
+            <img src="../../assets/nothingforcart.png" alt v-show="flag" />
+            <div class="goods_icon" v-show="goods" v-for="(i,index) in items" :key="index">
+              <div class="goods_title">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
+                  </el-col>
+                  <el-col :span="10">
+                    <span>{{i.name}}</span>
+                  </el-col>
+                  <el-col :span="12">
+                    <router-link
+                      :to="{
 						name:'goodsShow',
 						params:{
 						msg:'不包邮'
 						}
 					}"
-                >
-                  <span>{{i.postage}}</span>
-                  <i class="el-icon-arrow-right"></i>
-                </router-link>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="goods_dec">
-            <el-row :gutter="0">
-              <el-col :span="2">
-                <input type="checkbox" v-show="input" v-model="checked" />
-                <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
-              </el-col>
-              <el-col :span="6">
-                <img src="../../assets/shirt.jpg" alt />
-              </el-col>
-              <el-col :span="16">
-                <div class="goods_name">{{ i.names }}</div>
-                <div class="dec">
-                  <div class="size">
-                    <span>尺寸:{{ i.size }}</span>
-                    <span>颜色:{{i.color}}</span>
-                  </div>
-                  <div class="pay">
-                    <span v-show="many">&times;{{num}}</span>
-                    <span v-show="change">
-                      <table>
-                        <tr>
-                          <td @click="add(num)">+</td>
-                          <td>
-                            <input type="text" v-model="num" @keyup.13="search" />
-                          </td>
-                          <td @click="minus(num)">-</td>
-                        </tr>
-                      </table>
-                    </span>
-                    <span>&yen;{{i.money}}</span>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
+                    >
+                      <span>{{i.postage}}</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </router-link>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="goods_dec">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-show="input" v-model="checked" />
+                    <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
+                  </el-col>
+                  <el-col :span="6">
+                    <img src="../../assets/shirt.jpg" alt />
+                  </el-col>
+                  <el-col :span="16">
+                    <div class="goods_name">{{ i.names }}</div>
+                    <div class="dec">
+                      <div class="size">
+                        <span>尺寸:{{ i.size }}</span>
+                        <span>颜色:{{i.color}}</span>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <el-footer>
-      </el-footer>
+      <!-- 送货中 -->
+      <div v-if="isActive == 1">这里是送货中</div>
+      <!-- 异常单 -->
+      <div v-if="isActive == 2">这里是异常单</div>
+      <!-- 已完成 -->
+      <div v-if="isActive == 3">这里是已完成</div>
+
+      <el-footer></el-footer>
     </el-container>
-	<FooterItem></FooterItem>
+    <FooterItem></FooterItem>
   </div>
 </template>
 
@@ -89,6 +89,7 @@ export default {
   },
   data() {
     return {
+      isActive: 0, //显示  订单状态
       msg: "编辑",
       flag: false,
       goods: true,
@@ -180,22 +181,38 @@ export default {
 <style lang="less">
 #shopping_cart {
   .app_width {
-    .header {
-	  display: flex;
-	  padding: 20px 40px;
-      div {
-		flex: 1;
-	  }
-	  .back{
-		  box-sizing: border-box;
-		  padding-top: 8px;
-	  }
-	  .order{
-		  text-align: center;
-	  }
-	  .edit{
-		  text-align: right;
-	  }
+    .tab {
+      font-size: 40px;
+      box-sizing: border-box;
+      padding: 40px 30px 20px 20px;
+      border: 1px solid #fff;
+      background-color: #1a489d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      div,
+      i {
+        flex: 1;
+      }
+      i {
+        text-align: left;
+      }
+      .bring {
+        text-align: center;
+      }
+      .edit {
+        text-align: right;
+      }
+    }
+    .table {
+      box-sizing: border-box;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+      border-bottom: 1px solid #333;
+      .active {
+        color: #1a489d;
+      }
     }
   }
 }

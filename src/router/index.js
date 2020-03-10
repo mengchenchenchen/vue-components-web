@@ -1,17 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/page/index'
-import customerIndex from '@/page/personal/customerIndex'
-import Index from '@/page/personal/index'
-import sendAddress from '@/page/personal/sendAddress'
-import arriveAddress from '@/page/personal/arriveAddress'
-import GoodsInformation from '@/page/personal/goodsInformation'
-import Scanning from '@/page/personal/scanning'
+import index from '@/page/index' // 首页 选择用户对象
+import customerIndex from '@/page/personal/customerIndex'//下订单
+import Index from '@/page/personal/index'  //订单首页
+import sendAddress from '@/page/personal/sendAddress' //发送地址
+import arriveAddress from '@/page/personal/arriveAddress' // 到达的地址
+import Scanning from '@/page/personal/scanning'// 二维码扫描
 import order from '@/page/personal/order'//订单
 import register from '@/page/personal/register' //登录
-import addAddress from '@/page/personal/addAddress'
-import address from '@/page/personal/address'
-import businessIndex from '@/page/business/businessIndex'
+import mine from '@/page/personal/mine' //我的
+import addAddress from '@/page/personal/addAddress' 
+import address from '@/page/personal/address' //添加地址
+import Set from '@/page/personal/set' //注册页面
+import Riderindex from '@/page/Rider/riderIndex' //派送员首页
+import adminIndex from '@/page/admin/index'//管理员首页
 
 
 Vue.use(Router)
@@ -23,20 +25,17 @@ export default new Router({
       name: 'index',
       component: index
     },
-    {
-      path: '/customerIndex',
-      name: 'customerIndex',
-      component: customerIndex
-    },
+
+    //客户开始
     {
       path: '/Index',
       name: 'Index',
       component: Index
     },
     {
-      path: '/businessIndex',
-      name: 'businessIndex',
-      component: businessIndex
+      path: '/customerIndex',
+      name: 'customerIndex',
+      component: customerIndex
     },
     {
       path: '/sendAddress',
@@ -69,14 +68,38 @@ export default new Router({
       component: register,
     },
     {
-      path: '/GoodsInformation',
-      name: 'GoodsInformation',
-      component: GoodsInformation,
-    },
-    {
       path: '/Scanning',
       name: 'Scanning',
       component: Scanning,
     },
+    {
+      path: '/Set',
+      name: 'Set',
+      component: Set,
+    },
+    {
+      path: '/mine',
+      name: 'mine',
+      component: mine,
+    },
+    //客户下单结束
+
+    //派送员开始
+    {
+      path: '/Riderindex',
+      name: 'Riderindex',
+      component: Riderindex
+    },
+
+    //派送员结束
+
+    //管理员开始
+    {
+      path: '/adminIndex',
+      name: 'adminIndex',
+      component: adminIndex
+    },
+
+    //管理员结束
   ]
 })

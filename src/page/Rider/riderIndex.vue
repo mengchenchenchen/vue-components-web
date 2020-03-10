@@ -2,24 +2,21 @@
   <div class="mainbox">
     <div class="title">超市派送</div>
     <div class="table">
-      <div :class="{active : isActive == 0}" @click="isActive = 0">待接单</div>
-      <div :class="{active : isActive == 1}" @click="isActive = 1">送货中</div>
-      <div :class="{active : isActive == 2}" @click="isActive = 2">异常单</div>
-      <div :class="{active : isActive == 3}" @click="isActive = 3">已完成</div>
+      <div :class="{active : isActive == 0}" @click="isActive = 0">新任务</div>
+      <div :class="{active : isActive == 1}" @click="isActive = 1">待取货</div>
+      <div :class="{active : isActive == 2}" @click="isActive = 2">配送中</div>
     </div>
-    <!-- 待接单 -->
+    <!-- 新任务 -->
     <div v-if = "isActive == 0">
       <div class="box">
-        这里是待接单
+        这里是新任务
         <!-- <div class="name"></div> -->
       </div>
     </div>
-    <!-- 送货中 -->
-    <div v-if = "isActive == 1">这里是送货中</div>
-    <!-- 异常单 -->
-    <div v-if = "isActive == 2">这里是异常单</div>
-    <!-- 已完成 -->
-    <div v-if = "isActive == 3">这里是已完成</div>
+    <!-- 待取货 -->
+    <div v-if = "isActive == 1">这里是待取货</div>
+    <!-- 配送中 -->
+    <div v-if = "isActive == 2">这里是配送中</div>
     <footerRider></footerRider>
   </div>
 </template>

@@ -26,7 +26,7 @@
         </router-link>
         <router-link
           :to="{
-            name: 'register',
+            name: 'mine',
             params: {
               msg: ''
             }

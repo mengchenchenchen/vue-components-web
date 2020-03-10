@@ -46,6 +46,7 @@
 
 <script>
 import FooterItem from "../../components/footerbox";
+import axios from 'axios'
 
 export default {
   name: "HelloWorld",
@@ -56,7 +57,8 @@ export default {
     return {};
   },
   computed: {},
-  mounted() {},
+  mounted() {
+  },
   methods: {
       getOrder(){
           this.$router.push('./customerIndex')
@@ -73,6 +75,7 @@ export default {
 
 <style lang="less">
 .mainbox {
+  padding: 0;
   .tab {
     font-size: 46px;
     text-align: center;

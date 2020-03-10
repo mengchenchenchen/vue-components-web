@@ -46,7 +46,7 @@
       </div>
       <div class="time">
         <div class="before">增值服务</div>
-        <div class="after">
+        <div class="after"  @click="popupVisible=true">
           <input type="text" v-model="money" />
           <i class="el-icon-arrow-right"></i>
         </div>
@@ -119,6 +119,8 @@ export default {
       saleType: "", //时间
       money: "", //增值费
       tellWords: "", //给小哥说的话
+      sendmsg:{},
+      getmsg:{},
       slots1: [
         {
           flex: 1,
@@ -175,11 +177,12 @@ export default {
     }
   },
   mounted() {
+    this.sendmsg = window.localStorage.getItem('sendmsg')
     this.getLngLatLocation();
   },
   methods: {
     back(){
-      this.$router.go(-1)
+      this.$router.push('./index')
     },
     chooseAdress() {
       this.$router.push({

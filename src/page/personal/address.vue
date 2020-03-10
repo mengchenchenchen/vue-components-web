@@ -8,19 +8,19 @@
     </div>
     <div class="name">
       <div>姓名：</div>
-      <input type="text" placeholder="请填写姓名" v-model="addressList.name" />
+      <input type="text" placeholder="请填写姓名" v-model="name" />
     </div>
     <div class="phone">
       <div>电话：</div>
-      <input type="text" placeholder="请填写发货人电话" v-model="addressList.phone" />
+      <input type="text" placeholder="请填写发货人电话" v-model="phone" />
     </div>
     <div class="address">
       <div>地址：</div>
-      <input type="text" placeholder="请填写地址" v-model="addressList.address" />
+      <input type="text" placeholder="请填写地址" v-model="addr" />
     </div>
     <div class="gate">
       <div>楼号门牌：</div>
-      <input type="text" placeholder="例16号楼427室" v-model="addressList.gate" />
+      <input type="text" placeholder="例16号楼427室" v-model="gate" />
     </div>
     <div class="footer" @click="preserve">
       <div>保存</div>
@@ -29,34 +29,42 @@
 </template>
 
 <script>
+import api from "@/util/api";
+
 export default {
   data() {
     return {
-      addressList: {
-        name: "",
+       name: "",
         phone: "",
-        address: "",
-        gate: "",
-      }
+        addr: "",
+        gate: ""
     };
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     back() {
       this.$router.go(-1);
     },
     preserve() {
-        console.log(this.addressList);
-        sessionStorage.setItem('address', JSON.stringify(this.addressList))
-        this.$router.push({path:'./sendAddress'})
+      let params = {
+        name: this.name,
+        phone: this.phone,
+        addr: this.addr,
+        gate: this.gate,
+      };
+      console.log(params);
+      api.post('/php-ci/index.php/test/add_address',params).then(res=>{
+          console.log(res);
+          if(res.data.ret == 200){
+            alert('添加地址成功！')
+            this.$router.go(-1);
+          }
+      })
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
 html,
 body {
@@ -87,9 +95,11 @@ body {
     box-sizing: border-box;
     padding: 30px 20px;
     display: flex;
+    align-items: center;
     margin-bottom: 20px;
     input {
       border: none;
+      padding: 20px;
     }
   }
   .footer {

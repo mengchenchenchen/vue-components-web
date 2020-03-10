@@ -7,10 +7,10 @@
       <i class="el-icon-arrow-left" style="width:20px;"></i>
     </div>
     <div class="adressItem" v-for="(item, index) in addressList" :key="index" @click="chooseAddress(item)">
-      <div class="adress">{{ item.address }}{{item.gate}}</div>
+      <div class="adress">{{item.addr}}{{item.gate}}</div>
       <div class="info">
-        <div class="name">{{ item.name }}</div>
-        <div class="link">{{ item.phone }}</div>
+        <div class="name">{{item.name}}</div>
+        <div class="link">{{item.phone}}</div>
       </div>
     </div>
     <div class="footer" @click="addAddress">
@@ -21,23 +21,14 @@
 
 <script>
 import  axios from 'axios'
+import  api from '@/util/api'
 export default {
   data() {
     return {
-      msg: "",
-      addressList: [
-        {
-          address: "江苏省徐州市丰县",
-          gate:'1504',
-          name: "liu梦晨",
-          phone: "18251723449"
-        },
-      ]
+      addressList: [],
     };
   },
   mounted() {
-    // let address = JSON.parse(sessionStorage.getItem('address'));
-    // this.addressList.push(address);
     this.getList()
   },
   methods: {
@@ -45,15 +36,15 @@ export default {
       this.$router.push({ path: "./customerIndex"});
     },
     addAddress() {
-      this.$router.push({ path: "./address" ,query:{msg:this.msg}});
+      this.$router.push({ path: "./address"});
     },
     chooseAddress(item){
-        this.$router.push({ path: "./customerIndex" ,query:{sendmessage:this.item}});
-        // console.log(item)
+        window.localStorage.setItem('sendmsg',item)
+        this.$router.push({ path: "./customerIndex"});
     },
     getList(){
-      axios.get('http://192.168.1.24/php-ci/index.php/test/lala').then(res=>{
-          console.log(res);
+      api.post('/php-ci/index.php/test/address').then(res=>{
+        this.addressList = res.data
       })
     }
   }
@@ -100,6 +91,8 @@ body {
     }
   }
   .footer {
+    position: fixed;
+    bottom: 0;
     height: 80px;
     line-height: 80px;
     width: 100%;
