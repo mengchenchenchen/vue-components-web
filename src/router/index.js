@@ -16,7 +16,7 @@ import Set from '@/page/personal/set' //注册页面
 import batchSend from '@/page/personal/batchSend' //批量寄
 import Riderindex from '@/page/Rider/riderIndex' //派送员首页
 import adminIndex from '@/page/admin/index'//管理员首页
-
+import PageNotFind from '@/page/page-not-find'
 
 Vue.use(Router)
 
@@ -113,5 +113,10 @@ export default new Router({
     },
 
     //管理员结束
+    {
+      path:'*',
+      name:'page-not-find',
+      component:PageNotFind
+    }
   ]
 })
