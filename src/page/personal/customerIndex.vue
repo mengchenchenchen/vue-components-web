@@ -221,7 +221,9 @@ export default {
       this.money = this.info;
       this.popupVisible = false;
     },
-    toItemInformation() {}
+    toItemInformation() {
+      this.$router.push('./ItemInformation')
+    }
   }
 };
 </script>
