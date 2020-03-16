@@ -30,7 +30,169 @@
                   <el-col :span="12">
                     <router-link
                       :to="{
-						name:'goodsShow',
+                          name:'',
+                          params:{
+                          msg:'不包邮'
+                          }
+                        }"
+                    >
+                      <span>{{i.postage}}</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </router-link>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="goods_dec">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-show="input" v-model="checked" />
+                    <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
+                  </el-col>
+                  <el-col :span="6">
+                    <img src="../../assets/shirt.jpg" alt />
+                  </el-col>
+                  <el-col :span="16">
+                    <div class="goods_name">{{ i.names }}</div>
+                    <div class="dec">
+                      <div class="size">
+                        <span>尺寸:{{ i.size }}</span>
+                        <span>颜色:{{i.color}}</span>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 送货中 -->
+      <div v-if="isActive == 1">
+        <div class="box">
+          <!-- 这里是待接单 -->
+          <div class="goods_list">
+            <img src="../../assets/nothingforcart.png" alt v-show="flag" />
+            <div class="goods_icon" v-show="goods" v-for="(i,index) in items1" :key="index">
+              <div class="goods_title">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
+                  </el-col>
+                  <el-col :span="10">
+                    <span>{{i.name}}</span>
+                  </el-col>
+                  <el-col :span="12">
+                    <router-link
+                      :to="{
+                        name:'',
+                        params:{
+                        msg:'不包邮'
+                        }
+                      }"
+                    >
+                      <a :href="'tel:' + 18251723449">{{i.postage}}</a>
+                      <i class="el-icon-arrow-right"></i>
+                    </router-link>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="goods_dec">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-show="input" v-model="checked" />
+                    <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
+                  </el-col>
+                  <el-col :span="6">
+                    <img src="../../assets/shirt.jpg" alt />
+                  </el-col>
+                  <el-col :span="16">
+                    <div class="goods_name">{{ i.names }}</div>
+                    <div class="dec">
+                      <div class="size">
+                        <span>尺寸:{{ i.size }}</span>
+                        <span>颜色:{{i.color}}</span>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 异常单 -->
+      <div v-if="isActive == 2">
+        <div class="box">
+          <!-- 这里是待接单 -->
+          <div class="goods_list">
+            <img src="../../assets/nothingforcart.png" alt v-show="flag" />
+            <div class="goods_icon" v-show="goods" v-for="(i,index) in items2" :key="index">
+              <div class="goods_title">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
+                  </el-col>
+                  <el-col :span="10">
+                    <span>{{i.name}}</span>
+                  </el-col>
+                  <el-col :span="12">
+                    <router-link
+                      :to="{
+                        name:'',
+                        params:{
+                        msg:'不包邮'
+                        }
+                      }"
+                    >
+                      <span>{{i.postage}}</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </router-link>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="goods_dec">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-show="input" v-model="checked" />
+                    <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
+                  </el-col>
+                  <el-col :span="6">
+                    <img src="../../assets/shirt.jpg" alt />
+                  </el-col>
+                  <el-col :span="16">
+                    <div class="goods_name">{{ i.names }}</div>
+                    <div class="dec">
+                      <div class="size">
+                        <span>尺寸:{{ i.size }}</span>
+                        <span>颜色:{{i.color}}</span>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 已完成 -->
+      <div v-if="isActive == 3">
+        <div class="box">
+          <!-- 这里是待接单 -->
+          <div class="goods_list">
+            <img src="../../assets/nothingforcart.png" alt v-show="flag" />
+            <div class="goods_icon" v-show="goods" v-for="(i,index) in items3" :key="index">
+              <div class="goods_title">
+                <el-row :gutter="0">
+                  <el-col :span="2">
+                    <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
+                  </el-col>
+                  <el-col :span="10">
+                    <span>{{i.name}}</span>
+                  </el-col>
+                  <el-col :span="12">
+                    <router-link
+                      :to="{
+						name:'',
 						params:{
 						msg:'不包邮'
 						}
@@ -66,12 +228,6 @@
           </div>
         </div>
       </div>
-      <!-- 送货中 -->
-      <div v-if="isActive == 1">这里是送货中</div>
-      <!-- 异常单 -->
-      <div v-if="isActive == 2">这里是异常单</div>
-      <!-- 已完成 -->
-      <div v-if="isActive == 3">这里是已完成</div>
 
       <el-footer></el-footer>
     </el-container>
@@ -104,7 +260,69 @@ export default {
       items: [
         {
           name: "免税自营",
-          postage: "不包邮,满1亿包邮",
+          postage: "正在接单",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        },
+        {
+          name: "免税自营",
+          postage: "正在接单",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        }
+      ],
+      items1: [
+        {
+          name: "免税自营",
+          postage: "正在送货",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        },
+        {
+          name: "免税自营",
+          postage: "正在送货",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        }
+      ],
+      items2: [
+        {
+          name: "免税自营",
+          postage: "此单异常，联系客服",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        },
+        {
+          name: "免税自营",
+          postage: "此单异常，联系客服",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        }
+      ],
+      items3: [
+        {
+          name: "免税自营",
+          postage: "已完成配送",
+          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
+          size: "s",
+          color: "黑色",
+          money: 139
+        },
+        {
+          name: "免税自营",
+          postage: "已完成配送",
           names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
           size: "s",
           color: "黑色",
@@ -248,7 +466,7 @@ export default {
     background-color: white;
     font-size: 14px;
     .goods_title {
-      padding: 5px;
+      padding: 15px;
       border-bottom: 4px solid #e7e7e7;
       .el-col {
         height: 30px;
@@ -277,7 +495,7 @@ export default {
       padding: 5px;
       margin-bottom: 5px;
       .el-col {
-        height: 100px;
+        // height: 100px;
         font-size: 12px;
       }
       .el-col:first-child {
@@ -301,7 +519,6 @@ export default {
         .dec {
           position: absolute;
           left: 5px;
-          bottom: 5px;
           width: 95%;
           display: flex;
           justify-content: space-between;

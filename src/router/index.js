@@ -7,11 +7,13 @@ import sendAddress from '@/page/personal/sendAddress' //发送地址
 import arriveAddress from '@/page/personal/arriveAddress' // 到达的地址
 import Scanning from '@/page/personal/scanning'// 二维码扫描
 import order from '@/page/personal/order'//订单
+import ItemInformation from '@/page/personal/ItemInformation'//物品信息
 import register from '@/page/personal/register' //登录
 import mine from '@/page/personal/mine' //我的
 import addAddress from '@/page/personal/addAddress' 
 import address from '@/page/personal/address' //添加地址
 import Set from '@/page/personal/set' //注册页面
+import batchSend from '@/page/personal/batchSend' //批量寄
 import Riderindex from '@/page/Rider/riderIndex' //派送员首页
 import adminIndex from '@/page/admin/index'//管理员首页
 
@@ -63,6 +65,11 @@ export default new Router({
       component: order
     },
     {
+      path: '/ItemInformation',
+      name: 'ItemInformation',
+      component: ItemInformation
+    },
+    {
       path: '/register',
       name: 'register',
       component: register,
@@ -81,6 +88,11 @@ export default new Router({
       path: '/mine',
       name: 'mine',
       component: mine,
+    },
+    {
+      path: '/batchSend',
+      name: 'batchSend',
+      component: batchSend,
     },
     //客户下单结束
 

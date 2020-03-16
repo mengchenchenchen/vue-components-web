@@ -31,7 +31,7 @@
             <div class="lable">批量寄件 更急速</div>
           </div>
         </div>
-        <div class="one">
+        <div class="one" @click="toOrder">
           <img src="../../assets/dingdan.png" alt />
           <div class="des">
             <div class="name">寄件订单</div>
@@ -68,6 +68,9 @@ export default {
       },
       toSend(){
         this.$router.push('./batchSend')
+      },
+      toOrder(){
+        this.$router.push('./order')
       }
   }
 };
