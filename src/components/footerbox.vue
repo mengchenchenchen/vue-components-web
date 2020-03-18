@@ -4,7 +4,7 @@
       <div class="footerbox">
         <router-link
           :to="{
-            name: 'Index',
+            name: 'home',
             params: {
               msg: ''
             }
