@@ -1,10 +1,9 @@
 <template>
   <div class="mainbox">
-    <div class="tab">
-      <i class="el-icon-arrow-left" @click="back"></i>
-      <div class="bring">用户中心</div>
-      <div></div>
-    </div>
+    <mc-header bg="#1a489d" padding="15px">
+      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+      <span slot="center" class="text-bold">用户中心</span>
+    </mc-header>
     <div class="header">
       <div class="adatar">
         <img :src="adatar?adatar:require('../../assets/lixian.jpg')" alt />
@@ -33,10 +32,13 @@
 <script>
 import api from "@/util/api";
 import FooterItem from "../../components/footerbox";
+import McHeader from "@/components/header";
+
 export default {
   name: "adatar",
   components: {
-    FooterItem
+    FooterItem,
+    McHeader
   },
   data() {
     return {

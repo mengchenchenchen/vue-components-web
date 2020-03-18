@@ -1,8 +1,8 @@
 <template>
   <div class="mainbox">
-    <div class="tab">
-      <div class="title">罗马快递</div>
-    </div>
+    <mc-header bg="#1a489d" :size="40" padding="15px">
+      <span slot="center" class="text-bold">罗马快递</span>
+    </mc-header>
     <div class="logo">
       <img src="../../assets/bgcimg.jpg" alt />
     </div>
@@ -46,32 +46,30 @@
 
 <script>
 import FooterItem from "../../components/footerbox";
-import axios from 'axios'
-
+import McHeader from "@/components/header";
 export default {
-  name: "HelloWorld",
   components: {
-    FooterItem
+    FooterItem,
+    McHeader
   },
   data() {
     return {};
   },
   computed: {},
-  mounted() {
-  },
+  mounted() {},
   methods: {
-      getOrder(){
-          this.$router.push('./customerIndex')
-      },
-      sendMsg(){
-         this.$router.push('./scanning')
-      },
-      toSend(){
-        this.$router.push('./batchSend')
-      },
-      toOrder(){
-        this.$router.push('./order')
-      }
+    getOrder() {
+      this.$router.push("./customerIndex");
+    },
+    sendMsg() {
+      this.$router.push("./scanning");
+    },
+    toSend() {
+      this.$router.push("./batchSend");
+    },
+    toOrder() {
+      this.$router.push("./order");
+    }
   }
 };
 </script>
@@ -90,14 +88,14 @@ export default {
     }
   }
   .logo {
-      background-color: #1a489d;
+    background-color: #1a489d;
     width: 100%;
     img {
       width: 100%;
     }
   }
   .classify {
-      background-color: #1a489d;
+    background-color: #1a489d;
     margin-top: 20px;
     box-sizing: border-box;
     padding: 30px;
@@ -139,4 +137,5 @@ export default {
     }
   }
 }
+
 </style>

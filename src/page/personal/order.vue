@@ -1,11 +1,11 @@
 <template>
   <div id="shopping_cart">
     <el-container class="app_width">
-      <div class="tab">
-        <i class="el-icon-arrow-left" @click="back"></i>
-        <div class="bring">快递上门</div>
-        <div @click="write" class="edit">{{msg}}</div>
-      </div>
+      <mc-header bg="#1a489d" padding="15px">
+        <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+        <span slot="center" class="text-bold">快递上门</span>
+        <span slot="right" @click="write">{{msg}}</span>
+      </mc-header>
       <div class="table">
         <div :class="{active : isActive == 0}" @click="isActive = 0">待接单</div>
         <div :class="{active : isActive == 1}" @click="isActive = 1">送货中</div>
@@ -237,11 +237,13 @@
 
 <script>
 import FooterItem from "../../components/footerbox";
+import McHeader from "@/components/header";
 
 export default {
   name: "shopping_cart",
   components: {
-    FooterItem
+    FooterItem,
+    McHeader
   },
   data() {
     return {

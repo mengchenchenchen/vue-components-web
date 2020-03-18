@@ -33,7 +33,7 @@ export default {
   mounted() {},
   methods: {
     gotoRegister(permissions) {
-      this.$router.replace({ path: "/register", query: { permissions } });
+      this.$router.replace({ path: "/login", query: { permissions } });
     }
   }
 };

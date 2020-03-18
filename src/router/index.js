@@ -1,18 +1,17 @@
 import Vue from "vue";
 import Router from "vue-router";
-import index from "@/page/index"; // 首页 选择用户对象
 import customerIndex from "@/page/personal/customerIndex"; //下订单
-import Index from "@/page/personal/index"; //订单首页
+import home from "@/page/personal/home"; //订单首页
 import sendAddress from "@/page/personal/sendAddress"; //发送地址
 import arriveAddress from "@/page/personal/arriveAddress"; // 到达的地址
 import Scanning from "@/page/personal/scanning"; // 二维码扫描
 import order from "@/page/personal/order"; //订单
 import ItemInformation from "@/page/personal/ItemInformation"; //物品信息
-import register from "@/page/personal/register"; //登录
+import login from "@/page/personal/login"; //登录
 import mine from "@/page/personal/mine"; //我的
 import addAddress from "@/page/personal/addAddress";
 import address from "@/page/personal/address"; //添加地址
-import Set from "@/page/personal/set"; //注册页面
+import register from "@/page/personal/register"; //注册页面
 import batchSend from "@/page/personal/batchSend"; //批量寄
 import Riderindex from "@/page/Rider/riderIndex"; //派送员首页
 import adminIndex from "@/page/admin/index"; //管理员首页
@@ -25,15 +24,14 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      name: "index",
-      component: index
+      redirect: "/home"
     },
 
     //客户开始
     {
-      path: "/Index",
-      name: "Index",
-      component: Index
+      path: "/home",
+      name: "home",
+      component: home
     },
     {
       path: "/customerIndex",
@@ -71,9 +69,9 @@ const router = new Router({
       component: ItemInformation
     },
     {
-      path: "/register",
-      name: "register",
-      component: register
+      path: "/login",
+      name: "login",
+      component: login
     },
     {
       path: "/Scanning",
@@ -81,9 +79,9 @@ const router = new Router({
       component: Scanning
     },
     {
-      path: "/Set",
-      name: "Set",
-      component: Set
+      path: "/register",
+      name: "register",
+      component: register
     },
     {
       path: "/mine",
@@ -137,11 +135,14 @@ router.beforeEach((to, from, next) => {
   // http
   // console.log(to);
   // console.log(from);
-  // if (to.path === "/") {
-  //   next();
-  // }
-  // next("/");
-  next()
+  const auth = localStorage.getItem("auth");
+
+  if (to.path === "/login" || auth === "true") {
+    next();
+    return;
+  }
+  next("/login");
+  // next()
 });
 
 export default router;
