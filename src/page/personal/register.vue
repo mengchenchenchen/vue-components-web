@@ -20,6 +20,7 @@
         <br />
         <input type="text" placeholder="密码" v-model="pwd" ref="val1" style="color:white" />
         <br />
+
         <input type="button" value="登录" @click="login" />
       </form>
       <div class="register" @click="toSet">
@@ -35,7 +36,6 @@
 <script>
 import api from "@/util/api";
 export default {
-  name: "register",
   data() {
     return {
       phoneVal: "",

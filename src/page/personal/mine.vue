@@ -68,9 +68,9 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    loginOut(){
-        window.localStorage.clear()
-        this.$router.push('/')
+    loginOut() {
+      window.localStorage.clear();
+      this.$router.replace("/");
     }
     // submit() {
     //     var data = new FormData();
