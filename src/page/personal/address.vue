@@ -97,9 +97,12 @@ body {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    font-size: 26px;
     input {
       border: none;
       padding: 20px;
+      font-size: 26px;
+
     }
   }
   .footer {
