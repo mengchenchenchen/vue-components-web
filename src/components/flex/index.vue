@@ -1,5 +1,5 @@
 <template>
-  <div :style="flex_style">
+  <div :style="flex_style" @click="$emit('click',$event)">
     <slot></slot>
   </div>
 </template>
@@ -23,13 +23,13 @@ export default {
       type: String,
       default: "flex-start"
     },
-    margin: {
+    bg: {
       type: String,
-      default: "0"
+      default: "#fff"
     },
-    padding: {
-      type: String,
-      default: "0"
+    wrap: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -37,14 +37,15 @@ export default {
   },
   computed: {
     flex_style() {
-      const { display, column, justify, align, padding, margin } = this;
+      const { display, column, justify, align, bg, wrap } = this;
       return {
         display,
+        boxSizing: "border-box",
         flexDirection: column ? "column" : "row",
         justifyContent: justify,
         alignItems: align,
-        margin,
-        padding
+        flexWrap: wrap ? "wrap" : "nowrap",
+        backgroundColor: bg
       };
     }
   },

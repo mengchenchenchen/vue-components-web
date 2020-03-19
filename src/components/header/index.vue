@@ -7,6 +7,7 @@
 </template>
 <script>
 import McFlex from "@/components/flex";
+import util from "@/util";
 export default {
   components: { McFlex },
   props: {
@@ -38,7 +39,7 @@ export default {
         backgroundColor: bg,
         color,
         padding,
-        fontSize: size * 0.0312 + "rem"
+        fontSize:  util.px2rem(size)
       };
     }
   },
