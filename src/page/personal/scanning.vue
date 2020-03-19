@@ -1,6 +1,6 @@
 <template>
-  <div class="scan">
-    <div id="bcid">
+  <!-- <div class="scan"> -->
+  <!-- <div id="bcid">
       <div style="height:40%"></div>
       <p class="tip">...载入中...</p>
     </div>
@@ -8,10 +8,9 @@
       <button @click="startRecognize">1.创建控件</button>
       <button @click="startScan">2.开始扫描</button>
       <button @click="cancelScan">3.结束扫描</button>
-
       <button @click="closeScan">4.关闭控件</button>
-    </footer>
-  </div>
+  </footer>-->
+  <div class="new">正在开发，敬请期待。。。</div>
 </template>
 
 <script type='text/ecmascript-6'>
@@ -71,26 +70,36 @@ export default {
 };
 </script>
 <style lang="less">
-.scan {
+.new {
+  position: fixed;
+  width: 100%;
   height: 100%;
-  #bcid {
-    width: 100%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 3rem;
-    text-align: center;
-    color: #fff;
-    background: #ccc;
-  }
-  footer {
-    position: absolute;
-    left: 0;
-    bottom: 1rem;
-    height: 2rem;
-    line-height: 2rem;
-    z-index: 2;
-  }
+  background-color: #ececec;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
 }
+// .scan {
+//   height: 100%;
+//   #bcid {
+//     width: 100%;
+//     position: absolute;
+//     left: 0;
+//     right: 0;
+//     top: 0;
+//     bottom: 3rem;
+//     text-align: center;
+//     color: #fff;
+//     background: #ccc;
+//   }
+//   footer {
+//     position: absolute;
+//     left: 0;
+//     bottom: 1rem;
+//     height: 2rem;
+//     line-height: 2rem;
+//     z-index: 2;
+//   }
+// }
 </style>

@@ -6,49 +6,53 @@
     <div class="back" @click="back">
       <i class="el-icon-arrow-left" style="width:20px;"></i>
     </div>
-    <div class="adressItem" v-for="(item, index) in addressList" :key="index" @click="chooseAddress($event)">
-      <div class="adress">{{ item.address }}{{item.gate}}</div>
+    <div
+      class="adressItem"
+      v-for="(item, index) in addressList"
+      :key="index"
+      @click="chooseAddress(item)"
+    >
+      <div class="adress">{{ item.addr }}{{item.gate}}</div>
       <div class="info">
         <div class="name">{{ item.name }}</div>
         <div class="link">{{ item.phone }}</div>
       </div>
     </div>
     <div class="footer" @click="addAddress">
-      <div>添加发货地址</div>
+      <div>添加收货地址</div>
     </div>
   </div>
 </template>
 
 <script>
+import api from "@/util/api";
+import store from "@/util/store";
+
 export default {
   data() {
     return {
       msg: "",
-      addressList: [
-        {
-          address: "江苏省徐州市丰县",
-          gate:'1504',
-          name: "liu梦晨",
-          phone: "18251723449"
-        },
-      ]
+      addressList: []
     };
   },
   mounted() {
-    let address = JSON.parse(sessionStorage.getItem('address'));
-    this.addressList.push(address)
+    this.getList();
   },
   methods: {
     back() {
-      this.$router.push({ path: "./customerIndex"});
+      this.$router.push({ path: "./customerIndex" });
     },
     addAddress() {
-      this.$router.push({ path: "./address" ,query:{msg:this.msg}});
+      this.$router.push({ path: "./address" });
     },
-    chooseAddress(e){
-        console.log(111);
-        
-        console.log(e.target.innerHTML)
+    chooseAddress(item) {
+      store.setSession("collectmsg",JSON.stringify(item));
+      this.$router.push({ path: "./customerIndex" });
+    },
+    getList() {
+      api.post("/php-ci/index.php/test/address").then(res => {
+        this.addressList = res.data;
+      });
     }
   }
 };

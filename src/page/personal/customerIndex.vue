@@ -7,26 +7,26 @@
     </div>
     <!-- <div class="position" id="app">{{city}}</div> -->
     <div class="logo">
-      <img src="../../assets/paisonglogo.jpg" alt />
+      <img src="../../assets/paisonglogo.jpg" alt/>
     </div>
     <div class="chufa" @click="chooseAdress">
       <div class="ji">寄</div>
       <div class="info">
         <div class="qus">
-          <span class="one">从哪里寄？</span>
-          <span class="two"></span>
+          <span class="one">{{sendname}}</span>
+          <span class="two">{{sendphone}}</span>
         </div>
-        <div class="ans">点击选择寄件地址</div>
+        <div class="ans">{{sendaddress}}</div>
       </div>
     </div>
     <div class="daoda" @click="chooseAdress2">
       <div class="shou">收</div>
       <div class="info">
         <div class="qus">
-          <span class="one">寄到哪里？</span>
-          <span class="two"></span>
+          <span class="one">{{collectname}}</span>
+          <span class="two">{{collectphone}}</span>
         </div>
-        <div class="ans">点击选择收件人信息</div>
+        <div class="ans">{{collectaddress}}</div>
       </div>
     </div>
     <div class="anthor_info">
@@ -40,13 +40,13 @@
       <div class="time">
         <div class="before">物品信息</div>
         <div class="after" @click="toItemInformation">
-          <input type="text"/>
+          <input type="text" />
           <i class="el-icon-arrow-right"></i>
         </div>
       </div>
       <div class="time">
         <div class="before">增值服务</div>
-        <div class="after"  @click="popupVisible=true">
+        <div class="after" @click="popupVisible=true">
           <input type="text" v-model="money" />
           <i class="el-icon-arrow-right"></i>
         </div>
@@ -89,7 +89,7 @@
         <div>合计</div>
         <div>{{ totalMarks }}元</div>
       </div>
-      <div>立即下单</div>
+      <div class="getOrder">立即下单</div>
     </div>
   </div>
 </template>
@@ -97,6 +97,7 @@
 <script>
 import FooterItem from "../../components/footerbox";
 import { MessageBox, Toast, Picker, Popup, Header } from "mint-ui";
+import store from "@/util/store";
 
 export default {
   name: "HelloWorld",
@@ -106,6 +107,12 @@ export default {
   data() {
     return {
       isActive: 1,
+      sendname: "从哪里寄？",
+      sendphone: "",
+      sendaddress: "点击选择寄件人信息",
+      collectname: "寄到哪里？",
+      collectphone: "",
+      collectaddress: "点击选择收件人信息",
       letAdress: "请输入出发地址",
       goAdress: "请输入到达地址",
       time: "取件时间",
@@ -119,8 +126,8 @@ export default {
       saleType: "", //时间
       money: "", //增值费
       tellWords: "", //给小哥说的话
-      sendmsg:{},
-      getmsg:{},
+      sendmsg: {},
+      getmsg: {},
       slots1: [
         {
           flex: 1,
@@ -177,12 +184,28 @@ export default {
     }
   },
   mounted() {
-    this.sendmsg = window.localStorage.getItem('sendmsg')
+    this.sendmsg = window.localStorage.getItem("sendmsg");
     this.getLngLatLocation();
+    let sendmsg = JSON.parse(store.getSession("sendmsg"));
+    let collectmsg = JSON.parse(store.getSession("collectmsg"));
+    if (collectmsg) {
+      this.collectname = collectmsg.name;
+      this.collectphone = collectmsg.phone;
+      this.collectaddress = collectmsg.addr + sendmsg.gate;
+    } else {
+      return;
+    }
+    if (sendmsg) {
+      this.sendname = sendmsg.name;
+      this.sendphone = sendmsg.phone;
+      this.sendaddress = sendmsg.addr + sendmsg.gate;
+    } else {
+      return;
+    }
   },
   methods: {
-    back(){
-      this.$router.push('./index')
+    back() {
+      this.$router.push("./home");
     },
     chooseAdress() {
       this.$router.push({
@@ -222,9 +245,12 @@ export default {
       this.popupVisible = false;
     },
     toItemInformation() {
-      this.$router.push('./ItemInformation')
+      this.$router.push("./ItemInformation");
+    },
+    getOrder() {
+      store.clearSession();
     }
-  }
+  },
 };
 </script>
 
@@ -237,18 +263,19 @@ export default {
   .tab {
     font-size: 40px;
     padding: 40px 20px 20px;
-    border:1px solid #fff;
+    border: 1px solid #fff;
     background-color: #1a489d;
     color: #fff;
     display: flex;
     align-items: center;
-    div,i{
-      flex:1;
+    div,
+    i {
+      flex: 1;
     }
-    i{
+    i {
       text-align: left;
     }
-    .bring{
+    .bring {
       text-align: center;
     }
   }
@@ -377,8 +404,8 @@ export default {
     }
   }
   .footer {
-	  position: fixed;
-	  bottom: 0;
+    position: fixed;
+    bottom: 0;
     width: 100%;
     height: 100px;
     border-radius: 10px;

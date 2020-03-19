@@ -13,7 +13,7 @@
       <div class="ji">寄</div>
       <div class="info">
         <div class="qus">
-          <span class="one">从哪里寄？</span>
+          <span class="one">寄往哪里？</span>
           <span class="two"></span>
         </div>
         <div class="ans">点击选择寄件地址</div>
@@ -158,7 +158,7 @@ export default {
   },
   methods: {
     back(){
-      this.$router.push('./index')
+      this.$router.push('./home')
     },
     chooseAdress() {
       this.$router.push({

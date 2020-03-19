@@ -6,7 +6,12 @@
     <div class="back" @click="back">
       <i class="el-icon-arrow-left" style="width:20px;"></i>
     </div>
-    <div class="adressItem" v-for="(item, index) in addressList" :key="index" @click="chooseAddress(item)">
+    <div
+      class="adressItem"
+      v-for="(item, index) in addressList"
+      :key="index"
+      @click="chooseAddress(item)"
+    >
       <div class="adress">{{item.addr}}{{item.gate}}</div>
       <div class="info">
         <div class="name">{{item.name}}</div>
@@ -20,32 +25,34 @@
 </template>
 
 <script>
-import  axios from 'axios'
-import  api from '@/util/api'
+import axios from "axios";
+import api from "@/util/api";
+import store from "@/util/store";
 export default {
   data() {
     return {
-      addressList: [],
+      addressList: []
     };
   },
   mounted() {
-    this.getList()
+    this.getList();
   },
   methods: {
     back() {
-      this.$router.push({ path: "./customerIndex"});
+      this.$router.push({ path: "./customerIndex" });
     },
     addAddress() {
-      this.$router.push({ path: "./address"});
+      this.$router.push({ path: "./address" });
     },
-    chooseAddress(item){
-        window.localStorage.setItem('sendmsg',item)
-        this.$router.push({ path: "./customerIndex"});
+    chooseAddress(item) {
+      let sendmsg = [];
+      store.setSession("sendmsg",JSON.stringify(item));
+      this.$router.push({ path: "./customerIndex" });
     },
-    getList(){
-      api.post('/php-ci/index.php/test/address').then(res=>{
-        this.addressList = res.data
-      })
+    getList() {
+      api.post("/php-ci/index.php/test/address").then(res => {
+        this.addressList = res.data;
+      });
     }
   }
 };

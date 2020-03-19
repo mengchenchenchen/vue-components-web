@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import customerIndex from "@/page/personal/customerIndex"; //下订单
-import home from "@/page/personal/home"; //订单首页
+import home from "@/page/personal/home"; //首页
 import sendAddress from "@/page/personal/sendAddress"; //发送地址
 import arriveAddress from "@/page/personal/arriveAddress"; // 到达的地址
 import Scanning from "@/page/personal/scanning"; // 二维码扫描

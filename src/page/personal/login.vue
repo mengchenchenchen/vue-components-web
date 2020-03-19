@@ -2,16 +2,7 @@
   <div id="register">
     <div class="app_width">
       <img src="../../assets/login.png" alt />
-      <div class="cancel">
-        <router-link
-          :to="{
-            name: 'index',
-            params: {
-              msg: ''
-            }
-          }"
-        >取消</router-link>
-      </div>
+      <div class="cancel"></div>
       <div class="login_logo">
         <img src="../../assets/login_logo.png" alt />
       </div>
@@ -20,7 +11,14 @@
         <br />
         <input type="text" placeholder="密码" v-model="pwd" ref="val1" style="color:white" />
         <br />
-
+        <div class="chooseButton">
+          <input type="radio" id="one" value="1" v-model="permissions" />
+          <label for="one">个人用户</label>
+          <input type="radio" id="two" value="2" v-model="permissions" />
+          <label for="two">派送员</label>
+          <input type="radio" id="two" value="3" v-model="permissions" />
+          <label for="two">管理员</label>
+        </div>
         <input type="button" value="登录" @click="login" />
       </form>
       <div class="register" @click="toSet">
@@ -38,34 +36,45 @@ import api from "@/util/api";
 export default {
   data() {
     return {
-      phoneVal: "",
-      pwd: "",
+      phoneVal: "18251723449",
+      pwd: "123456",
       isShow: false,
-      permissions: ""
+      permissions: "1" //选择的按钮
     };
   },
-  mounted() {
-    this.permissions = this.$route.query.permissions;
-  },
+  mounted() {},
   methods: {
-    login() {
+     login() {
       let params = {
         telephone: this.phoneVal,
         password: this.pwd,
         permissions: this.permissions
       };
+      console.log(params);
       if (!/^1[3456789]\d{9}$/.test(this.phoneVal)) {
         alert("手机号码有误，请重填");
-        return false;
+        return;
       } else {
+        // const result = await api.post("/php-ci/index.php/test/login", params);
+        // if (result.data.ret === "200" && this.permissions === "1") {
+        //    // this.$router.push("/home");
+        //   console.log("123",this.$router);
+        
+        // } else {
+        //   console.log("error");
+        // }
+        // return;
+
         api.post("/php-ci/index.php/test/login", params).then(res => {
+          console.log("111111");
           if (res.data.ret == "200") {
             localStorage.phone = this.phoneVal;
-            if (this.permissions == 1) {
-              this.$router.push("./Index");
-            } else if (this.permissions == 2) {
+            localStorage.auth = "true";
+            if (this.permissions === '1') {
+              this.$router.push("/home");
+            } else if (this.permissions === '2') {
               this.$router.push("Riderindex");
-            } else if (this.permissions == 3) {
+            } else if (this.permissions === '3') {
               this.$router.push("/adminIndex");
             }
           } else {
@@ -118,7 +127,7 @@ export default {
     left: 0;
     width: 100%;
     text-align: center;
-    input {
+    & > input {
       width: 460px;
       text-align: center;
       background-color: transparent;
@@ -126,15 +135,19 @@ export default {
       height: 80px;
       margin-bottom: 20px;
     }
-    input:last-child {
+    & > input:last-child {
       border: none;
       background-color: #e7b800;
       color: white;
     }
+    .chooseButton {
+      color: #757575;
+      margin-bottom: 30px;
+    }
   }
   .register {
     position: absolute;
-    top: 750px;
+    top: 840px;
     left: 0;
     width: 100%;
     .icon {

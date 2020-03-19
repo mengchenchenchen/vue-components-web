@@ -2,8 +2,7 @@
   <div id="shopping_cart">
     <el-container class="app_width">
       <mc-header bg="#1a489d" padding="15px">
-        <i slot="left" class="el-icon-arrow-left" @click="back"></i>
-        <span slot="center" class="text-bold">快递上门</span>
+        <span slot="center" class="text-bold" style="position:relative;left:10px;">快递上门</span>
         <span slot="right" @click="write">{{msg}}</span>
       </mc-header>
       <div class="table">
@@ -21,9 +20,9 @@
             <div class="goods_icon" v-show="goods" v-for="(i,index) in items" :key="index">
               <div class="goods_title">
                 <el-row :gutter="0">
-                  <el-col :span="2">
+                  <!-- <el-col :span="2">
                     <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-                  </el-col>
+                  </el-col> -->
                   <el-col :span="10">
                     <span>{{i.name}}</span>
                   </el-col>
@@ -46,7 +45,7 @@
                 <el-row :gutter="0">
                   <el-col :span="2">
                     <input type="checkbox" v-show="input" v-model="checked" />
-                    <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
+                    <!-- <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" /> -->
                   </el-col>
                   <el-col :span="6">
                     <img src="../../assets/shirt.jpg" alt />
