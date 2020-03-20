@@ -1,14 +1,12 @@
 <template>
-  <div class="mainbox">
-      <div class="box">{{msg}}</div>
-  </div>
+    <div class="box">{{msg}}</div>
 </template>
 
 <script>
 export default {
     data(){
         return{
-
+            
         }
     },
     props:{
@@ -26,13 +24,17 @@ export default {
         .box{
             position: fixed;
             left: 50%;
-            right:50%;
+            top:50%;
             transform: translate(-50%,-50%);
             width: 260px;
-            height: 260px;
+            height: 100px;
             border-radius: 20px;
             background:#1a489d;
             color: #fff;
+            text-align:center;
+            line-height: 100px;
+            z-index: 100;
+            font-size: 40px;
         }
     }
 </style>>

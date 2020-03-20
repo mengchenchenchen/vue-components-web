@@ -55,15 +55,6 @@ export default {
         alert("手机号码有误，请重填");
         return;
       } else {
-        // const result = await api.post("/php-ci/index.php/test/login", params);
-        // if (result.data.ret === "200" && this.permissions === "1") {
-        //    // this.$router.push("/home");
-        //   console.log("123",this.$router);
-        
-        // } else {
-        //   console.log("error");
-        // }
-        // return;
 
         api.post("/php-ci/index.php/test/login", params).then(res => {
           console.log("111111");

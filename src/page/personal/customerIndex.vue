@@ -1,12 +1,11 @@
 <template>
   <div class="mainbox">
     <mc-header bg="#1a489d" :size="40" padding="15px">
-        <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
       <span slot="center" class="text-bold">快递上门</span>
     </mc-header>
-    <!-- <div class="position" id="app">{{city}}</div> -->
     <div class="logo">
-      <img src="../../assets/paisonglogo.jpg" alt/>
+      <img src="../../assets/paisonglogo.jpg" alt />
     </div>
     <div class="chufa" @click="chooseAdress">
       <div class="ji">寄</div>
@@ -52,7 +51,7 @@
       </div>
       <div class="tell">
         <div class="before">对小哥说</div>
-        <textarea name id cols="44" rows="4" v-model="tellWords"></textarea>
+        <textarea rows="4" v-model="tellWords"></textarea>
       </div>
       <mt-popup
         v-model="popupVisible"
@@ -85,27 +84,30 @@
     </div>
     <div class="footer">
       <div class="total">
-        <div>合计</div>
-        <div>{{ totalMarks }}元</div>
+        <div>合计{{ totalMarks }}元</div>
+        <div class="label">基础价格7元</div>
       </div>
       <div @click="getOrder">立即下单</div>
     </div>
+    <mc-success :msg="msg" v-if="isShow"></mc-success>
   </div>
 </template>
 
 <script>
 import FooterItem from "../../components/footerbox";
 import McHeader from "@/components/header";
-
+import McSuccess from "@/components/success";
 
 import { MessageBox, Toast, Picker, Popup, Header } from "mint-ui";
 import store from "@/util/store";
+import api from "@/util/api";
 
 export default {
   name: "HelloWorld",
   components: {
     FooterItem,
-    McHeader
+    McHeader,
+    McSuccess
   },
   data() {
     return {
@@ -123,15 +125,14 @@ export default {
       moneyValue: "", //货损费的钱数
       xiaofei: "", //小费的钱数
       inputValue: "", //备注的内容
-      city: "定位中...",
       popupVisible1: false, //弹框的显示隐藏
       popupVisible: false, //弹框的显示隐藏
       saleType: "", //时间
       money: "", //增值费
       tellWords: "", //给小哥说的话
       sendmsg: {},
-      getmsg: {},
-      goodsinfo:'',
+      goodsinfo: "",
+      msg: "下单成功！",
       slots1: [
         {
           flex: 1,
@@ -164,31 +165,22 @@ export default {
           className: "slot1",
           textAlign: "center"
         }
-      ]
+      ],
+      isShow: false //成功的弹框 显隐
     };
   },
   computed: {
     totalMarks: function() {
       let totalmoney = 7;
-      let a;
-      let b;
-      if (this.moneyValue == "") {
-        a = 0;
+      if (this.money) {
+        totalmoney = parseFloat(this.money) + parseFloat(totalmoney);
       } else {
-        a = parseFloat(this.moneyValue);
+        totalmoney = 7;
       }
-      if (this.xiaofei == "") {
-        b = 0;
-      } else {
-        b = parseFloat(this.xiaofei);
-      }
-      totalmoney = a + b + totalmoney;
-      //   console.log(this.moneyValue)
       return parseFloat(totalmoney);
     }
   },
   mounted() {
-    this.getLngLatLocation();
     let sendmsg = JSON.parse(store.getSession("sendmsg"));
     let collectmsg = JSON.parse(store.getSession("collectmsg"));
     this.goodsinfo = store.getSession("goodsinfo");
@@ -221,19 +213,6 @@ export default {
         path: "./arriveAddress"
       });
     },
-    getLngLatLocation() {
-      let _this = this;
-      AMap.plugin("AMap.CitySearch", function() {
-        var citySearch = new AMap.CitySearch();
-        citySearch.getLocalCity(function(status, result) {
-          if (status === "complete" && result.info === "OK") {
-            // 查询成功，result即为当前所在城市信息
-            //   console.log('通过ip获取当前城市：',result)
-            _this.city = result.city;
-          }
-        });
-      });
-    },
     onValuesChange1(picker, values) {
       this.message = values[0] + values[1];
     },
@@ -252,9 +231,22 @@ export default {
       this.$router.push("./ItemInformation");
     },
     getOrder() {
+      let params = {
+        title: this.goodsinfo,
+        provenance: this.sendaddress,
+        destination: this.collectaddress,
+        price: this.totalMarks,
+        remarks: this.tellWords
+      }
+      api.post("/php-ci/index.php/test/add_order",params)
+      this.isShow = true;
+      setInterval(() => {
+        this.isShow = false;
+        this.$router.push("./order");
+      }, 1000);
       store.clearSession();
     }
-  },
+  }
 };
 </script>
 
@@ -382,6 +374,7 @@ export default {
         margin-bottom: 20px;
       }
       textarea {
+        width: 100%;
         border-radius: 5px;
         background-color: rgba(241, 241, 241, 0.98);
         padding: 10px;
@@ -426,6 +419,9 @@ export default {
       div {
         display: inline-block;
         margin-right: 20px;
+      }
+      .label {
+        font-size: 16px;
       }
     }
   }

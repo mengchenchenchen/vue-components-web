@@ -14,8 +14,9 @@ import address from "@/page/personal/address"; //添加地址
 import register from "@/page/personal/register"; //注册页面
 import batchSend from "@/page/personal/batchSend"; //批量寄
 import Riderindex from "@/page/Rider/riderIndex"; //派送员首页
+import RiderMine from "@/page/Rider/riderMine"; //派送员我的
 import adminIndex from "@/page/admin/index"; //管理员首页
-import PageNotFind from "@/page/page-not-find";
+import PageNotFind from "@/page/page-not-find";//页面找不到
 import McFlexDemo from "@/components/flex/demo";
 
 Vue.use(Router);
@@ -100,6 +101,11 @@ const router = new Router({
       path: "/Riderindex",
       name: "Riderindex",
       component: Riderindex
+    },
+    {
+      path: "/RiderMine",
+      name: "RiderMine",
+      component: RiderMine
     },
 
     //派送员结束

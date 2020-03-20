@@ -29,7 +29,7 @@ export default {
     get_status(val) {
       let temp = "";
       for (const item of this.status) {
-        if (item.value === val) {
+        if (item.value == val) {
           temp = item.label;
           break;
         }

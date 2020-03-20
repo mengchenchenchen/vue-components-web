@@ -22,21 +22,21 @@
     <div class="loginOut">
       <button @click="loginOut">退出登录</button>
     </div>
-    <FooterItem></FooterItem>
+    <Footer-rider></Footer-rider>
   </div>
 </template>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
 import api from "@/util/api";
-import FooterItem from "@/components/footerbox";
+import FooterRider from "@/components/footerRider";
 import McHeader from "@/components/header";
 
 export default {
   name: "adatar",
   components: {
-    FooterItem,
-    McHeader
+    McHeader,
+    FooterRider
   },
   data() {
     return {
