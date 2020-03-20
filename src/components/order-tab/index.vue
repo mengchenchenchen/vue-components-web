@@ -2,7 +2,7 @@
   <mc-flex justify="space-around">
     <span
       :class="{'active':value===item.value}"
-      v-for="item in tablist"
+      v-for="item in list"
       :key="item.value"
       @click="handleClick(item.value)"
     >{{item.label}}</span>
@@ -21,7 +21,7 @@ export default {
       type: Number,
       required: true
     },
-    tablist: {
+    list: {
       type: Array,
       default: []
     }
