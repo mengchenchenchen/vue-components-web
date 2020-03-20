@@ -91,7 +91,7 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .mainbox {
   position: fixed;
   width: 100%;

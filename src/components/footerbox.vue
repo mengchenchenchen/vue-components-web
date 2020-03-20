@@ -48,6 +48,9 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.mainbox {
+  height: 100px;
+}
 .el-footer {
   padding: 0;
   width: 100%;
@@ -80,7 +83,7 @@ export default {
       margin-bottom: 10px;
     }
     p {
-        padding: 5px;
+      padding: 5px;
     }
     .recommend {
       background-image: url(../assets/home_icon_off.png);
