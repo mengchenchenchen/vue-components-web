@@ -97,7 +97,7 @@ export default {
         },
         {
           id: "ashjbbdhajs78sadha",
-          title: "免税自营5",
+          title: "免税自营6",
           status: 3,
           img: shirt,
           provenance: "始发地",
@@ -108,7 +108,18 @@ export default {
         },
         {
           id: "asgdyuaa62715316",
-          title: "免税自营5",
+          title: "免税自营7",
+          status: 3,
+          img: shirt,
+          provenance: "始发地",
+          destination: "目的地",
+          info: "薯条印花圆领卫衣",
+          create_time: "12:45",
+          price: "998"
+        },
+         {
+          id: "asbdjhasb45easj",
+          title: "免税自营8",
           status: 3,
           img: shirt,
           provenance: "始发地",

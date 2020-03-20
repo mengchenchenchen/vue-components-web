@@ -1,111 +1,77 @@
 <template>
-  <div class="mainbox">
-    <el-footer style="height: auto;">
-      <div class="footerbox">
-        <router-link
-          :to="{
-            name: 'home',
-            params: {
-              msg: ''
-            }
-          }"
-        >
-          <i class="recommend"></i>
-          <p>首页</p>
-        </router-link>
-        <router-link
-          :to="{
-            name: 'order',
-            params: {
-              msg: ''
-            }
-          }"
-        >
-          <i class="shop"></i>
-          <p>订单</p>
-        </router-link>
-        <router-link
-          :to="{
-            name: 'mine',
-            params: {
-              msg: ''
-            }
-          }"
-        >
-          <i class="mine"></i>
-          <p>我的</p>
-        </router-link>
-      </div>
-    </el-footer>
-  </div>
+  <mc-flex justify="space-around" align="center" class="foot-box">
+    <mc-flex
+      column
+      align="center"
+      v-for="item in tabs"
+      :key="item.text"
+      @click.stop="$router.replace(item.route)"
+    >
+      <img v-if="curr_name=== item.route" :src="item.selected" class="icon" />
+      <img v-else :src="item.unselect" class="icon" />
+      <span class="text" :class="{'text-active':curr_name=== item.route}">{{item.text}}</span>
+    </mc-flex>
+  </mc-flex>
 </template>
 
 <script>
+import home_icon_off from "@/assets/home_icon_off.png";
+import cart_icon_off from "@/assets/cart_icon_off.png";
+import my_icon_off from "@/assets/my_icon_off.png";
+import home_icon_on from "@/assets/home_icon_on.png";
+import cart_icon_on from "@/assets/cart_icon_on.png";
+import my_icon_on from "@/assets/my_icon_on.png";
+import McFlex from "@/components/flex";
 export default {
+  components: { McFlex },
   data() {
-    return {};
+    return {
+      tabs: [
+        {
+          text: "首页",
+          selected: home_icon_on,
+          unselect: home_icon_off,
+          route: "home"
+        },
+        {
+          text: "订单",
+          selected: cart_icon_on,
+          unselect: cart_icon_off,
+          route: "order"
+        },
+        {
+          text: "我的",
+          selected: my_icon_on,
+          unselect: my_icon_off,
+          route: "mine"
+        }
+      ]
+    };
+  },
+  computed: {
+    curr_name() {
+      return this.$route.name || "null";
+    }
   }
 };
 </script>
 <style scoped lang="less">
-.mainbox {
-  height: 100px;
+.icon {
+  width: 40px;
+  height: 40px;
+  margin-top: 5px;
 }
-.el-footer {
-  padding: 0;
-  width: 100%;
+.text-active {
+  color: #402fdb;
+}
+.text {
+  font-size: 12px;
+}
+.foot-box {
   position: fixed;
   bottom: 0;
-}
-.footerbox {
-  padding: 20px 0;
-  max-width: 750px;
-  min-width: 150px;
+  height: 100px;
   width: 100%;
-  margin: auto;
-  display: flex;
-  border-top: 5px solid #e7e7e7;
-  background-color: #fff;
-  a {
-    flex: 1;
-    display: block;
-    color: #333;
-    font-size: 18px;
-    line-height: 20px;
-    text-decoration: none;
-    text-align: center;
-    i {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      background-repeat: no-repeat;
-      background-size: contain;
-      margin-bottom: 10px;
-    }
-    p {
-      padding: 5px;
-    }
-    .recommend {
-      background-image: url(../assets/home_icon_off.png);
-    }
-    .shop {
-      background-image: url(../assets/cart_icon_off.png);
-    }
-    .mine {
-      background-image: url(../assets/my_icon_off.png);
-    }
-  }
-  .router-link-active {
-    color: #402fdb;
-    .recommend {
-      background-image: url(../assets/home_icon_on.png);
-    }
-    .shop {
-      background-image: url(../assets/cart_icon_on.png);
-    }
-    .mine {
-      background-image: url(../assets/my_icon_on.png);
-    }
-  }
+  border-top: 1px solid #e7e7e7;
 }
 </style>
