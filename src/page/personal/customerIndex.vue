@@ -31,16 +31,16 @@
     </div>
     <div class="anthor_info">
       <div class="time">
-        <div class="before">预约上门时间</div>
-        <div class="after" @click="popupVisible1=true">
-          <input type="text" v-model="saleType" />
+        <div class="before">物品信息</div>
+        <div class="after" @click="toItemInformation">
+          <input type="text" v-model="goodsinfo" />
           <i class="el-icon-arrow-right"></i>
         </div>
       </div>
       <div class="time">
-        <div class="before">物品信息</div>
-        <div class="after" @click="toItemInformation">
-          <input type="text" />
+        <div class="before">预约上门时间</div>
+        <div class="after" @click="popupVisible1=true">
+          <input type="text" v-model="saleType" />
           <i class="el-icon-arrow-right"></i>
         </div>
       </div>
@@ -89,7 +89,7 @@
         <div>合计</div>
         <div>{{ totalMarks }}元</div>
       </div>
-      <div class="getOrder">立即下单</div>
+      <div @click="getOrder">立即下单</div>
     </div>
   </div>
 </template>
@@ -128,6 +128,7 @@ export default {
       tellWords: "", //给小哥说的话
       sendmsg: {},
       getmsg: {},
+      goodsinfo:'',
       slots1: [
         {
           flex: 1,
@@ -184,21 +185,21 @@ export default {
     }
   },
   mounted() {
-    this.sendmsg = window.localStorage.getItem("sendmsg");
     this.getLngLatLocation();
     let sendmsg = JSON.parse(store.getSession("sendmsg"));
     let collectmsg = JSON.parse(store.getSession("collectmsg"));
-    if (collectmsg) {
-      this.collectname = collectmsg.name;
-      this.collectphone = collectmsg.phone;
-      this.collectaddress = collectmsg.addr + sendmsg.gate;
-    } else {
-      return;
-    }
+    this.goodsinfo = store.getSession("goodsinfo");
     if (sendmsg) {
       this.sendname = sendmsg.name;
       this.sendphone = sendmsg.phone;
       this.sendaddress = sendmsg.addr + sendmsg.gate;
+    } else {
+      return;
+    }
+    if (collectmsg) {
+      this.collectname = collectmsg.name;
+      this.collectphone = collectmsg.phone;
+      this.collectaddress = collectmsg.addr + sendmsg.gate;
     } else {
       return;
     }

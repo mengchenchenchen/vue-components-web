@@ -39,15 +39,15 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push({ path: "./customerIndex" });
+      window.history.go(-1);
     },
     addAddress() {
       this.$router.push({ path: "./address" });
     },
     chooseAddress(item) {
       let sendmsg = [];
-      store.setSession("sendmsg",JSON.stringify(item));
-      this.$router.push({ path: "./customerIndex" });
+      store.setSession("sendmsg", JSON.stringify(item));
+      window.history.go(-1);
     },
     getList() {
       api.post("/php-ci/index.php/test/address").then(res => {
