@@ -1,11 +1,9 @@
 <template>
   <div class="mainbox">
-    <div class="header">
-      <div class="title">发货地址</div>
-    </div>
-    <div class="back" @click="back">
-      <i class="el-icon-arrow-left" style="width:20px;"></i>
-    </div>
+    <mc-header bg="#1a489d" :size="40" padding="15px">
+      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+      <span slot="center" class="text-bold">发货地址</span>
+    </mc-header>
     <div class="name">
       <div>姓名：</div>
       <input type="text" placeholder="请填写姓名" v-model="name" />
@@ -30,8 +28,12 @@
 
 <script>
 import api from "@/util/api";
+import McHeader from '@/components/header'
 
 export default {
+  components:{
+    McHeader
+  },
   data() {
     return {
        name: "",
@@ -106,10 +108,12 @@ body {
     }
   }
   .footer {
+    position: fixed;
+    bottom: 0;
     height: 80px;
     line-height: 80px;
     width: 100%;
-    background-color: rgb(64, 47, 219);
+    background-color:#1a489d;
     text-align: center;
     color: white;
   }

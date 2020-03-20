@@ -1,10 +1,9 @@
 <template>
   <div class="mainbox">
-    <div class="tab">
-      <i class="el-icon-arrow-left" @click="back"></i>
-      <div class="bring">快递上门</div>
-      <div></div>
-    </div>
+    <mc-header bg="#1a489d" :size="40" padding="15px">
+        <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+      <span slot="center" class="text-bold">快递上门</span>
+    </mc-header>
     <!-- <div class="position" id="app">{{city}}</div> -->
     <div class="logo">
       <img src="../../assets/paisonglogo.jpg" alt/>
@@ -96,13 +95,17 @@
 
 <script>
 import FooterItem from "../../components/footerbox";
+import McHeader from "@/components/header";
+
+
 import { MessageBox, Toast, Picker, Popup, Header } from "mint-ui";
 import store from "@/util/store";
 
 export default {
   name: "HelloWorld",
   components: {
-    FooterItem
+    FooterItem,
+    McHeader
   },
   data() {
     return {
@@ -255,7 +258,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .mainbox {
   position: fixed;
   width: 100%;

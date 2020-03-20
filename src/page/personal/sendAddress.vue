@@ -1,11 +1,15 @@
 <template>
   <div class="mainbox">
-    <div class="header">
+    <mc-header bg="#1a489d" :size="40" padding="15px">
+      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+      <span slot="center" class="text-bold">选择发件地址</span>
+    </mc-header>
+    <!-- <div class="header">
       <div class="title">选择发件地址</div>
-    </div>
-    <div class="back" @click="back">
+    </div>-->
+    <!-- <div class="back" @click="back">
       <i class="el-icon-arrow-left" style="width:20px;"></i>
-    </div>
+    </div>-->
     <div
       class="adressItem"
       v-for="(item, index) in addressList"
@@ -28,7 +32,12 @@
 import axios from "axios";
 import api from "@/util/api";
 import store from "@/util/store";
+import McHeader from "@/components/header";
+
 export default {
+  components: {
+    McHeader
+  },
   data() {
     return {
       addressList: []
@@ -58,7 +67,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 html,
 body {
   width: 100%;
