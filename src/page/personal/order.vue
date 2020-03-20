@@ -5,12 +5,7 @@
         <span slot="center" class="text-bold" style="position:relative;left:10px;">快递上门</span>
         <span slot="right" @click="write">{{msg}}</span>
       </mc-header>
-      <div class="table">
-        <div :class="{active : isActive == 0}" @click="isActive = 0">待接单</div>
-        <div :class="{active : isActive == 1}" @click="isActive = 1">送货中</div>
-        <div :class="{active : isActive == 2}" @click="isActive = 2">异常单</div>
-        <div :class="{active : isActive == 3}" @click="isActive = 3">已完成</div>
-      </div>
+      <order-tab style="margin-top:1rem;" v-model="isActive" :tablist="tabList" @select="selectTab"></order-tab>
       <!-- 待接单 -->
       <div v-if="isActive == 0">
         <div class="box">
@@ -22,7 +17,7 @@
                 <el-row :gutter="0">
                   <!-- <el-col :span="2">
                     <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-                  </el-col> -->
+                  </el-col>-->
                   <el-col :span="10">
                     <span>{{i.name}}</span>
                   </el-col>
@@ -237,15 +232,22 @@
 <script>
 import FooterItem from "../../components/footerbox";
 import McHeader from "@/components/header";
-
+import OrderTab from "@/components/order-tab";
 export default {
   name: "shopping_cart",
   components: {
     FooterItem,
-    McHeader
+    McHeader,
+    OrderTab
   },
   data() {
     return {
+      tabList: [
+        { label: "待接单", value: 0 },
+        { label: "送货中", value: 1 },
+        { label: "异常单", value: 2 },
+        { label: "已完成", value: 3 }
+      ],
       isActive: 0, //显示  订单状态
       msg: "编辑",
       flag: false,
@@ -341,6 +343,9 @@ export default {
     };
   },
   methods: {
+    selectTab(val){
+      console.log(val)
+    },
     back() {
       this.$router.go(-1);
     },
