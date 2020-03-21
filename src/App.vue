@@ -18,4 +18,5 @@ export default {
 .text-bold {
   font-weight: bold;
 }
+
 </style>
