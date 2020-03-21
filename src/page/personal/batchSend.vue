@@ -4,12 +4,6 @@
       <i slot="left" class="el-icon-arrow-left" @click="back"></i>
       <span slot="center" class="text-bold">选择发件地址</span>
     </mc-header>
-    <!-- <div class="tab">
-      <i class="el-icon-arrow-left" @click="back"></i>
-      <div class="bring">批量寄件</div>
-      <div></div>
-    </div> -->
-    <!-- <div class="position" id="app">{{city}}</div> -->
     <div class="logo">
       <img src="../../assets/paisonglogo.jpg" alt />
     </div>
@@ -57,26 +51,33 @@
       </div>
       <div @click="getOrder">立即下单</div>
     </div>
+
+    <mc-success :msg="msg" v-if="isShow"></mc-success>
   </div>
 </template>
 
 <script>
 import FooterItem from "../../components/footerbox";
+import McHeader from "@/components/header";
+import McSuccess from "@/components/success";
+
 import { MessageBox, Toast, Picker, Popup, Header } from "mint-ui";
+
 import store from "@/util/store";
-import McHeader from "@/components/header"
+import api from "@/util/api";
 
 export default {
   name: "HelloWorld",
   components: {
     FooterItem,
-    McHeader
+    McHeader,
+    McSuccess
   },
   data() {
     return {
-      sendname:'寄往哪里？',
-      sendphone:'',
-      sendaddress:'点击选择寄件地址',
+      sendname: "寄往哪里？",
+      sendphone: "",
+      sendaddress: "点击选择寄件地址",
       value: "", //时间选择
       inputValue: "", //备注的内容
       popupVisible1: false, //弹框的显示隐藏
@@ -108,30 +109,14 @@ export default {
           textAlign: "center"
         }
       ],
+      isShow: false,
+      msg:'下单成功！',
     };
   },
   computed: {
-    // totalMarks: function() {
-    //   let totalmoney = 7;
-    //   let a;
-    //   let b;
-    //   if (this.moneyValue == "") {
-    //     a = 0;
-    //   } else {
-    //     a = parseFloat(this.moneyValue);
-    //   }
-    //   if (this.xiaofei == "") {
-    //     b = 0;
-    //   } else {
-    //     b = parseFloat(this.xiaofei);
-    //   }
-    //   totalmoney = a + b + totalmoney;
-    //   //   console.log(this.moneyValue)
-    //   return parseFloat(totalmoney);
-    // }
   },
   mounted() {
-    this.sendmsg = window.localStorage.getItem('sendmsg')
+    this.sendmsg = window.localStorage.getItem("sendmsg");
     this.getLngLatLocation();
     let sendmsg = JSON.parse(store.getSession("sendmsg"));
     if (sendmsg) {
@@ -143,8 +128,8 @@ export default {
     }
   },
   methods: {
-    back(){
-      window.history.go(-1)
+    back() {
+      window.history.go(-1);
     },
     chooseAdress() {
       this.$router.push({
@@ -171,8 +156,21 @@ export default {
       this.saleType = this.message;
       this.popupVisible1 = false;
     },
-    getOrder(){
-
+    getOrder() {
+      let params = {
+        title: "",
+        provenance: "",
+        destination: this.sendaddress,
+        price: 7,
+        remarks: this.tellWords
+      };
+      api.post("/php-ci/index.php/test/add_order", params).then(res => {});
+      this.isShow = true;
+      setInterval(() => {
+        this.isShow = false;
+        this.$router.push("./order");
+      }, 1000);
+      store.clearSession();
     }
   }
 };
@@ -187,18 +185,19 @@ export default {
   .tab {
     font-size: 40px;
     padding: 40px 20px 20px;
-    border:1px solid #fff;
+    border: 1px solid #fff;
     background-color: #1a489d;
     color: #fff;
     display: flex;
     align-items: center;
-    div,i{
-      flex:1;
+    div,
+    i {
+      flex: 1;
     }
-    i{
+    i {
       text-align: left;
     }
-    .bring{
+    .bring {
       text-align: center;
     }
   }
@@ -327,8 +326,8 @@ export default {
     }
   }
   .footer {
-	  position: fixed;
-	  bottom: 0;
+    position: fixed;
+    bottom: 0;
     width: 100%;
     height: 100px;
     border-radius: 10px;

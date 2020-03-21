@@ -1,374 +1,74 @@
 <template>
-  <div class="mainbox">
-    <div class="title">超市派送</div>
-    <div class="table">
-      <div :class="{active : isActive == 0}" @click="isActive = 0">新任务</div>
-      <div :class="{active : isActive == 1}" @click="isActive = 1">待取货</div>
-      <div :class="{active : isActive == 2}" @click="isActive = 2">配送中</div>
+  <div>
+    <div class="wrapper-order">
+      <mc-header bg="#1a489d" padding="15px">
+        <span slot="center" class="text-bold" style="position:relative;left:0.5rem;">快递上门</span>
+      </mc-header>
+      <order-tab style="margin-top:1rem;" v-model="isActive" :list="statusList"></order-tab>
+      <order-box :list="filterList(isActive)" :status="statusList"></order-box>
     </div>
-    <!-- 新任务 -->
-    <div v-if="isActive == 0">
-      <div class="box">
-        <!-- 这里是新任务 -->
-        <!-- <div class="name"></div> -->
-        <div class="box">
-          <!-- 这里是待接单 -->
-          <div class="goods_list">
-            <img src="../../assets/nothingforcart.png" alt v-show="flag" />
-            <div class="goods_icon" v-show="goods" v-for="(i,index) in items1" :key="index">
-              <div class="goods_title">
-                <el-row :gutter="0">
-                  <el-col :span="2">
-                    <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-                  </el-col>
-                  <el-col :span="10">
-                    <span>{{i.name}}</span>
-                  </el-col>
-                  <el-col :span="12">
-                    <router-link
-                      :to="{
-                        name:'',
-                        params:{
-                        msg:'不包邮'
-                        }
-                      }"
-                    >
-                      <a :href="'tel:' + 18251723449">{{i.postage}}</a>
-                      <i class="el-icon-arrow-right"></i>
-                    </router-link>
-                  </el-col>
-                </el-row>
-              </div>
-              <div class="goods_dec">
-                <el-row :gutter="0">
-                  <el-col :span="2">
-                    <input type="checkbox" v-show="input" v-model="checked" />
-                    <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
-                  </el-col>
-                  <el-col :span="6">
-                    <img src="../../assets/shirt.jpg" alt />
-                  </el-col>
-                  <el-col :span="16">
-                    <div class="goods_name">{{ i.names }}</div>
-                    <div class="dec">
-                      <div class="size">
-                        <span>尺寸:{{ i.size }}</span>
-                        <span>颜色:{{i.color}}</span>
-                      </div>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 待取货 -->
-    <div v-if="isActive == 1">
-      <!-- 这里是待取货 -->
-      <div class="box">
-        <!-- 这里是待接单 -->
-        <div class="goods_list">
-          <img src="../../assets/nothingforcart.png" alt v-show="flag" />
-          <div class="goods_icon" v-show="goods" v-for="(i,index) in items2" :key="index">
-            <div class="goods_title">
-              <el-row :gutter="0">
-                <el-col :span="2">
-                  <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-                </el-col>
-                <el-col :span="10">
-                  <span>{{i.name}}</span>
-                </el-col>
-                <el-col :span="12">
-                  <router-link
-                    :to="{
-                        name:'',
-                        params:{
-                        msg:'不包邮'
-                        }
-                      }"
-                  >
-                    <a :href="'tel:' + 18251723449">{{i.postage}}</a>
-                    <i class="el-icon-arrow-right"></i>
-                  </router-link>
-                </el-col>
-              </el-row>
-            </div>
-            <div class="goods_dec">
-              <el-row :gutter="0">
-                <el-col :span="2">
-                  <input type="checkbox" v-show="input" v-model="checked" />
-                  <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
-                </el-col>
-                <el-col :span="6">
-                  <img src="../../assets/shirt.jpg" alt />
-                </el-col>
-                <el-col :span="16">
-                  <div class="goods_name">{{ i.names }}</div>
-                  <div class="dec">
-                    <div class="size">
-                      <span>尺寸:{{ i.size }}</span>
-                      <span>颜色:{{i.color}}</span>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 配送中 -->
-    <div v-if="isActive == 2">
-      <!-- 这里是配送中 -->
-      <div class="box">
-        <!-- 这里是待接单 -->
-        <div class="goods_list">
-          <img src="../../assets/nothingforcart.png" alt v-show="flag" />
-          <div class="goods_icon" v-show="goods" v-for="(i,index) in items3" :key="index">
-            <div class="goods_title">
-              <el-row :gutter="0">
-                <el-col :span="2">
-                  <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-                </el-col>
-                <el-col :span="10">
-                  <span>{{i.name}}</span>
-                </el-col>
-                <el-col :span="12">
-                  <router-link
-                    :to="{
-                        name:'',
-                        params:{
-                        msg:'不包邮'
-                        }
-                      }"
-                  >
-                    <a :href="'tel:' + 18251723449">{{i.postage}}</a>
-                    <i class="el-icon-arrow-right"></i>
-                  </router-link>
-                </el-col>
-              </el-row>
-            </div>
-            <div class="goods_dec">
-              <el-row :gutter="0">
-                <el-col :span="2">
-                  <input type="checkbox" v-show="input" v-model="checked" />
-                  <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
-                </el-col>
-                <el-col :span="6">
-                  <img src="../../assets/shirt.jpg" alt />
-                </el-col>
-                <el-col :span="16">
-                  <div class="goods_name">{{ i.names }}</div>
-                  <div class="dec">
-                    <div class="size">
-                      <span>尺寸:{{ i.size }}</span>
-                      <span>颜色:{{i.color}}</span>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <footerRider></footerRider>
+    <footer-item></footer-item>
   </div>
 </template>
 
 <script>
-import footerRider from "../../components/footerRider";
+import FooterItem from "@/components/footerRider";
+import McHeader from "@/components/header";
+import OrderTab from "@/components/order-tab";
+import StatusBar from "@/components/status-bar";
+import OrderItem from "@/components/order-item";
+import OrderBox from "@/components/order-box";
 
+import nothingforcart from "@/assets/nothingforcart.png";
+
+import api from "@/util/api";
 export default {
-  name: "index",
   components: {
-    footerRider
+    FooterItem,
+    McHeader,
+    OrderTab,
+    StatusBar,
+    OrderItem,
+    OrderBox,
   },
   data() {
     return {
-      isActive: 0,
-      flag: false,
-      checked: false,
-      forb: false,
-      goods: true,
-      input: true,
-      items1: [
-        {
-          name: "免税自营",
-          postage: "领取任务",
-          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
-          size: "s",
-          color: "黑色",
-          money: 139
-        },
-        {
-          name: "免税自营",
-          postage: "领取任务",
-          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
-          size: "s",
-          color: "黑色",
-          money: 139
-        }
+      statusList: [
+        { label: "新任务", value: 0 },
+        { label: "待取货", value: 1 },
+        { label: "配送中", value: 2 }
       ],
-      items2: [
-        {
-          name: "免税自营",
-          postage: "去取货",
-          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
-          size: "s",
-          color: "黑色",
-          money: 139
-        },
-        {
-          name: "免税自营",
-          postage: "去取货",
-          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
-          size: "s",
-          color: "黑色",
-          money: 139
-        }
-      ],
-      items3: [
-        {
-          name: "免税自营",
-          postage: "正在配送",
-          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
-          size: "s",
-          color: "黑色",
-          money: 139
-        },
-        {
-          name: "免税自营",
-          postage: "正在配送",
-          names: "2nd Witness 恶搞kaws 薯条印花圆领卫衣",
-          size: "s",
-          color: "黑色",
-          money: 139
-        }
-      ]
+      isActive: 0, //显示  订单状态
+      temp: []
     };
   },
-  methods: {}
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    filterList(val) {
+      return this.temp.filter(v => v.status == val);
+    },
+    getList() {
+      api.post("/php-ci/index.php/test/order").then(res => {
+        if (res.status === 200) {
+          this.temp = res.data;
+        } else {
+          alert("错误！");
+        }
+      });
+    }
+  }
 };
 </script>
 
-<style lang='less'>
-.mainbox {
-  padding: 0px;
-  .title {
-    text-align: center;
-    font-size: 30px;
-    color: #fff;
-    box-sizing: border-box;
-    padding: 20px 30px;
-    background-color: #402fdb;
-  }
-  .table {
-    box-sizing: border-box;
-    padding: 20px;
-    display: flex;
-    justify-content: space-around;
-    border-bottom: 1px solid #333;
-    .active {
-      color: #402fdb;
-    }
-  }
-  .goods_list {
-    background-color: #e7e7e7;
-    img {
-      width: 100%;
-    }
-    .goods_icon {
-      margin-top: 10px;
-      background-color: white;
-      font-size: 14px;
-      .goods_title {
-        padding: 15px;
-        border-bottom: 4px solid #e7e7e7;
-        .el-col {
-          height: 30px;
-          padding: 0;
-        }
-        .el-col:first-child {
-          text-align: center;
-          input {
-            margin-top: 8px;
-          }
-        }
-        .el-col:nth-child(2) {
-          line-height: 30px;
-        }
-        .el-col:last-child {
-          padding: 0 10px;
-          text-align: right;
-          a {
-            color: #e7b801;
-            text-decoration: none;
-            line-height: 30px;
-          }
-        }
-      }
-      .goods_dec {
-        padding: 5px;
-        margin-bottom: 5px;
-        .el-col {
-          // height: 100px;
-          font-size: 12px;
-        }
-        .el-col:first-child {
-          text-align: center;
-          input {
-            margin-top: 43px;
-          }
-          img {
-            margin-top: 30px;
-          }
-        }
-        .el-col:nth-child(2) {
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-        .el-col:last-child {
-          position: relative;
-          padding: 5px;
-          .dec {
-            position: absolute;
-            left: 5px;
-            width: 95%;
-            display: flex;
-            justify-content: space-between;
-            .size {
-              padding: 5px;
-              display: flex;
-              flex-direction: column;
-            }
-            .pay {
-              font-size: 15px;
-              font-weight: bold;
-              padding: 5px;
-              display: flex;
-              flex-direction: column;
-            }
-            table {
-              border: 1px solid black;
-              border-collapse: collapse;
-              td {
-                padding: 2px;
-                border: 1px solid black;
-              }
-              input {
-                width: 30px;
-                border: none;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+<style lang="less">
+.wrapper-order {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 120px;
+  overflow-y: scroll;
 }
 </style>

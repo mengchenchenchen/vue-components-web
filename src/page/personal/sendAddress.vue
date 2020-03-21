@@ -4,12 +4,6 @@
       <i slot="left" class="el-icon-arrow-left" @click="back"></i>
       <span slot="center" class="text-bold">选择发件地址</span>
     </mc-header>
-    <!-- <div class="header">
-      <div class="title">选择发件地址</div>
-    </div>-->
-    <!-- <div class="back" @click="back">
-      <i class="el-icon-arrow-left" style="width:20px;"></i>
-    </div>-->
     <div
       class="adressItem"
       v-for="(item, index) in addressList"

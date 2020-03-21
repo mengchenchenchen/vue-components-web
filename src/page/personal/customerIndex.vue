@@ -238,7 +238,9 @@ export default {
         price: this.totalMarks,
         remarks: this.tellWords
       }
-      api.post("/php-ci/index.php/test/add_order",params)
+      api.post("/php-ci/index.php/test/add_order",params).then(res=>{
+        
+      })
       this.isShow = true;
       setInterval(() => {
         this.isShow = false;
