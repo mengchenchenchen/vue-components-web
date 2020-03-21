@@ -51,15 +51,6 @@ export default {
       return this.temp.filter(v => v.status == val);
     },
     getList() {
-<<<<<<< HEAD
-      api.post("/php-ci/index.php/test/order").then(res => {
-        if (res.status === 200) {
-          this.temp = res.data;
-        } else {
-          alert("错误！");
-        }
-      });
-=======
       api
         .post("/php-ci/index.php/test/order")
         .then(res => {
@@ -70,7 +61,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
->>>>>>> 71cb9599efe83636dbdf36208197cb0ec42e910e
     }
   }
 };

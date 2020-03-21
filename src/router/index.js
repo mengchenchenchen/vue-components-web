@@ -9,7 +9,7 @@ import order from "@/page/personal/order"; //订单
 import ItemInformation from "@/page/personal/ItemInformation"; //物品信息
 import login from "@/page/personal/login"; //登录
 import mine from "@/page/personal/mine"; //我的
-import distributionDetails from "@/page/personal/distributionDetails";//配送详情页面
+// import distributionDetails from "@/page/personal/distributionDetails";//配送详情页面
 import address from "@/page/personal/address"; //添加地址
 import register from "@/page/personal/register"; //注册页面
 import batchSend from "@/page/personal/batchSend"; //批量寄
@@ -50,11 +50,11 @@ const router = new Router({
       name: "arriveAddress",
       component: arriveAddress
     },
-    {
-      path: "/distributionDetails",
-      name: "distributionDetails",
-      component: distributionDetails
-    },
+    // {
+    //   path: "/distributionDetails",
+    //   name: "distributionDetails",
+    //   component: distributionDetails
+    // },
     {
       path: "/address",
       name: "address",

@@ -26,7 +26,6 @@
       </mc-flex>
     </mc-flex>
 
-    <!--  -->
     <div v-for="item in objectInfo" :key="item.name">
       <mc-flex
         justify="space-between"
@@ -233,18 +232,6 @@ export default {
       this.set_object_info("money", values[0]);
     },
     getOrder() {
-<<<<<<< HEAD
-      let params = {
-        title: this.goodsinfo,
-        provenance: this.sendaddress,
-        destination: this.collectaddress,
-        price: this.totalMarks,
-        remarks: this.tellWords
-      }
-      api.post("/php-ci/index.php/test/add_order",params).then(res=>{
-        
-      })
-=======
       const { totalMarks } = this;
       const { tellWords, goodsinfo } = this.get_object_info();
       const { sendmsg, collectmsg } = this.get_addr_list();
@@ -263,7 +250,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
->>>>>>> 71cb9599efe83636dbdf36208197cb0ec42e910e
       this.isShow = true;
       setTimeout(() => {
         this.isShow = false;
