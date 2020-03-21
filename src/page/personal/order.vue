@@ -21,7 +21,7 @@ import OrderBox from "@/components/order-box";
 
 import nothingforcart from "@/assets/nothingforcart.png";
 
-import api from "@/util/api"
+import api from "@/util/api";
 export default {
   components: {
     FooterItem,
@@ -43,19 +43,24 @@ export default {
       temp: []
     };
   },
-  mounted(){
-    this.getList()
+  mounted() {
+    this.getList();
   },
   methods: {
     filterList(val) {
       return this.temp.filter(v => v.status == val);
     },
-    getList(){
-      api.post('/php-ci/index.php/test/order').then(res=>{
-        if(res.status === 200){
-          this.temp = res.data
-        }
-      })
+    getList() {
+      api
+        .post("/php-ci/index.php/test/order")
+        .then(res => {
+          if (res.status === 200) {
+            this.temp = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
