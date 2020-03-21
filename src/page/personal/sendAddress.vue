@@ -49,7 +49,7 @@ export default {
     },
     chooseAddress(item) {
       let sendmsg = [];
-      store.setSession("sendmsg", JSON.stringify(item));
+      store.setSession("sendmsg", item);
       window.history.go(-1);
     },
     getList() {
