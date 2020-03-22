@@ -19,6 +19,7 @@ import AdminIndex from "@/page/admin/index"; //管理员首页
 import AdminMine from "@/page/admin/adminMine"; //管理员 我的
 import PageNotFind from "@/page/page-not-find";//页面找不到
 import McFlexDemo from "@/components/flex/demo";
+import LogisticsDetails from "@/page/personal/logistics-details";
 
 Vue.use(Router);
 
@@ -127,6 +128,11 @@ const router = new Router({
       path: "/components/flex",
       name: "components-flex",
       component: McFlexDemo
+    },
+    {
+      path: "/logistics-details",
+      name: "logistics-details",
+      component: LogisticsDetails
     },
     //管理员结束
     {
