@@ -7,80 +7,23 @@
       <div :class="{active : isActive == 0}" @click="isActive = 0">订单</div>
       <div :class="{active : isActive == 1}" @click="isActive = 1">派送员</div>
     </div>
-    <!-- 待接单 -->
     <div v-if="isActive == 0">
-      <!-- 这里是待接单 -->
-      <!-- <div class="name"></div> -->
-      <div class="box">
-        <!-- 这里是待接单 -->
-        <div class="goods_list">
-          <img src="../../assets/nothingforcart.png" alt v-show="flag" />
-          <div class="goods_icon" v-show="goods" v-for="(i,index) in items1" :key="index">
-            <div class="goods_title">
-              <el-row :gutter="0">
-                <el-col :span="2">
-                  <input type="checkbox" v-model="checked" @click="checkedAll(index)" />
-                </el-col>
-                <el-col :span="10">
-                  <span>{{i.name}}</span>
-                </el-col>
-                <el-col :span="12">
-                  <router-link
-                    :to="{
-                        name:'',
-                        params:{
-                        msg:'不包邮'
-                        }
-                      }"
-                  >
-                    <a :href="'tel:' + 18251723449">{{i.postage}}</a>
-                    <i class="el-icon-arrow-right"></i>
-                  </router-link>
-                </el-col>
-              </el-row>
-            </div>
-            <div class="goods_dec">
-              <el-row :gutter="0">
-                <el-col :span="2">
-                  <input type="checkbox" v-show="input" v-model="checked" />
-                  <img src="../../assets/forbidden.png" v-show="forb" @click="del(index)" />
-                </el-col>
-                <el-col :span="6">
-                  <img src="../../assets/shirt.jpg" alt />
-                </el-col>
-                <el-col :span="16">
-                  <div class="goods_name">{{ i.names }}</div>
-                  <div class="dec">
-                    <div class="size">
-                      <span>尺寸:{{ i.size }}</span>
-                      <span>颜色:{{i.color}}</span>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
-        </div>
-      </div>
+      订单
     </div>
-
-    <!-- 送货中 -->
-    <div v-if="isActive == 1">这里是送货中</div>
-    <!-- 异常单 -->
-    <div v-if="isActive == 2">这里是异常单</div>
-    <!-- 已完成 -->
-    <div v-if="isActive == 3">这里是已完成</div>
-    <footerRider></footerRider>
+    <div v-if="isActive == 1">
+      派送员
+    </div>
+    <footerAdmin></footerAdmin>
   </div>
 </template>
 
 <script>
-import footerRider from "../../components/footerRider";
+import footerAdmin from "@/components/footerAdmin";
 
 export default {
   name: "index",
   components: {
-    footerRider
+    footerAdmin
   },
   data() {
     return {

@@ -70,7 +70,7 @@ export default {
     },
     loginOut() {
       window.localStorage.clear();
-      this.$router.replace("/");
+      this.$router.replace("/login");
     }
   }
 };

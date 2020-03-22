@@ -26,7 +26,6 @@
       </mc-flex>
     </mc-flex>
 
-    <!--  -->
     <div v-for="item in objectInfo" :key="item.name">
       <mc-flex
         justify="space-between"

@@ -36,10 +36,10 @@ import api from "@/util/api";
 export default {
   data() {
     return {
-      phoneVal: "18251723449",
-      pwd: "123456",
+      phoneVal: "",
+      pwd: "",
       isShow: false,
-      permissions: "1" //选择的按钮
+      permissions: "" //选择的按钮
     };
   },
   mounted() {},
@@ -50,14 +50,12 @@ export default {
         password: this.pwd,
         permissions: this.permissions
       };
-      console.log(params);
       if (!/^1[3456789]\d{9}$/.test(this.phoneVal)) {
         alert("手机号码有误，请重填");
         return;
       } else {
 
         api.post("/php-ci/index.php/test/login", params).then(res => {
-          console.log("111111");
           if (res.data.ret == "200") {
             localStorage.phone = this.phoneVal;
             localStorage.auth = "true";

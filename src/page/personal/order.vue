@@ -29,7 +29,7 @@ export default {
     OrderTab,
     StatusBar,
     OrderItem,
-    OrderBox
+    OrderBox,
   },
   data() {
     return {
