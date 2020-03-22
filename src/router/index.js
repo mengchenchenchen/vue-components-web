@@ -16,8 +16,9 @@ import batchSend from "@/page/personal/batchSend"; //批量寄
 import Riderindex from "@/page/Rider/riderIndex"; //派送员首页
 import RiderMine from "@/page/Rider/riderMine"; //派送员我的
 import adminIndex from "@/page/admin/index"; //管理员首页
-import PageNotFind from "@/page/page-not-find";//页面找不到
+import PageNotFind from "@/page/page-not-find"; //页面找不到
 import McFlexDemo from "@/components/flex/demo";
+import LogisticsDetails from "@/page/personal/logistics-details";
 
 Vue.use(Router);
 
@@ -121,6 +122,11 @@ const router = new Router({
       path: "/components/flex",
       name: "components-flex",
       component: McFlexDemo
+    },
+    {
+      path: "/logistics-details",
+      name: "logistics-details",
+      component: LogisticsDetails
     },
     //管理员结束
     {
