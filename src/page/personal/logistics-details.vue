@@ -33,7 +33,7 @@ export default {
       type: Object,
       default() {
         return {
-          title: "这是标题，这是标题",
+          title: "洗漱用品，1kg",
           id: "1823828738128378213821",
           activities: [
             {

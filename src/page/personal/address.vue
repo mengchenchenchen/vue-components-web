@@ -67,7 +67,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 html,
 body {
   width: 100%;
@@ -75,20 +75,6 @@ body {
   background-color: rgb(250, 248, 248);
 }
 .mainbox {
-  .header {
-    box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
-    font-size: 40px;
-    background-color: #fff;
-    color: black;
-  }
-  .back {
-    background-color: #fff;
-    margin-top: -68px;
-    font-size: 40px;
-    margin-bottom: 40px;
-  }
   .name,
   .phone,
   .address,

@@ -209,7 +209,7 @@ export default {
       }
 
       if (collectmsg) {
-        const arrive_addr = this.addrList[0];
+        const arrive_addr = this.addrList[1];
         arrive_addr.title = collectmsg.name;
         arrive_addr.subtitle = collectmsg.phone;
         arrive_addr.tip = collectmsg.addr + sendmsg.gate;
