@@ -28,8 +28,9 @@ import McHeader from "@/components/header";
 import HomeBox from "@/components/home-box";
 import McFlex from "@/components/flex";
 
+
 import kuaidiyuan from "@/assets/kuaidiyuan.png";
-import search from "@/assets/search.png";
+import search from "@/assets/search_logo.png";
 import jijian from "@/assets/jijian.png";
 import dingdan from "@/assets/dingdan.png";
 
@@ -52,8 +53,8 @@ export default {
         },
         {
           img: search,
-          title: "扫码寄件",
-          info: "扫码寄件 更快捷",
+          title: "搜索订单",
+          info: "查找寄件 更快捷",
           value: "scanning"
         },
         {

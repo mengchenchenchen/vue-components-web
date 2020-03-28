@@ -60,7 +60,7 @@ export default {
             localStorage.phone = this.phoneVal;
             localStorage.auth = "true";
             if (this.permissions === '1') {
-              this.$router.push("/home");
+              this.$router.push("/AppointmentTime");
             } else if (this.permissions === '2') {
               this.$router.push("Riderindex");
             } else if (this.permissions === '3') {

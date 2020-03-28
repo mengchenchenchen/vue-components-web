@@ -1,105 +1,98 @@
 <template>
-  <!-- <div class="scan"> -->
-  <!-- <div id="bcid">
-      <div style="height:40%"></div>
-      <p class="tip">...载入中...</p>
+  <div>
+    <mc-header bg="#1a489d" padding="15px">
+      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+      <span slot="center" class="text-bold" style="position:relative;left:0.5rem;">搜索订单</span>
+    </mc-header>
+    <div class="inputbox">
+      <input type="text" v-model="searchWords" placeholder="请输入订单号" />
+      <button @click="searchOrder">搜索</button>
     </div>
-    <footer>
-      <button @click="startRecognize">1.创建控件</button>
-      <button @click="startScan">2.开始扫描</button>
-      <button @click="cancelScan">3.结束扫描</button>
-      <button @click="closeScan">4.关闭控件</button>
-  </footer>-->
-  <div class="new">正在开发，敬请期待。。。</div>
+    <div class="orderList">
+      <div class="orderTitle">您的订单有：</div>
+      <div v-for="(item,index) in orderList" :key="index">
+        <order-item :item="item"></order-item>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script type='text/ecmascript-6'>
-let scan = null;
+<script>
+import McHeader from "@/components/header";
+import OrderItem from "@/components/order-item";
+
+import api from "@/util/api";
 
 export default {
+  components: { McHeader, OrderItem },
   data() {
     return {
-      codeUrl: ""
+      searchWords: "",
+      orderList: []
     };
   },
+  mounted() {
+    this.getList();
+  },
   methods: {
-    //创建扫描控件
-    startRecognize() {
-      let that = this;
-      if (!window.plus) return;
-      scan = new plus.barcode.Barcode("bcid");
-      scan.onmarked = onmarked;
-
-      function onmarked(type, result, file) {
-        switch (type) {
-          case plus.barcode.QR:
-            type = "QR";
-            break;
-          case plus.barcode.EAN13:
-            type = "EAN13";
-            break;
-          case plus.barcode.EAN8:
-            type = "EAN8";
-            break;
-          default:
-            type = "其它" + type;
-            break;
-        }
-        result = result.replace(/\n/g, "");
-        that.codeUrl = result;
-        alert(result);
-        that.closeScan();
-      }
+    back() {
+      this.$router.back();
     },
-    //开始扫描
-    startScan() {
-      if (!window.plus) return;
-      scan.start();
+    getList() {
+      api
+        .post("/php-ci/index.php/test/order")
+        .then(res => {
+          if (res.status === 200) {
+            this.orderList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    //关闭扫描
-    cancelScan() {
-      if (!window.plus) return;
-      scan.cancel();
-    },
-    //关闭条码识别控件
-    closeScan() {
-      if (!window.plus) return;
-      scan.close();
+    searchOrder() {
+      const params = {
+        orderNumber: this.searchWords
+      };
+      api
+        .post("/php-ci/index.php/test/searchOrder", params)
+        .then(res => {
+          if (res.status === 200) {
+            this.orderList = res.data.data
+            // console.log(11)
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
 </script>
 <style lang="less">
-.new {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: #ececec;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
+.inputbox {
+  padding: 25px;
+  text-align: center;
+  border-bottom: 1px solid #1a489d;
+  input {
+    width: 400px;
+    font-size: 36px;
+    padding: 20px;
+    border: 1px solid #1a489d;
+    border-radius: 10px;
+  }
+  button {
+    width: 100px;
+    height: 80px;
+    border: none;
+    border-radius: 10px;
+    background-color: #1a489d;
+    color: white;
+    font-size: 30px;
+  }
 }
-// .scan {
-//   height: 100%;
-//   #bcid {
-//     width: 100%;
-//     position: absolute;
-//     left: 0;
-//     right: 0;
-//     top: 0;
-//     bottom: 3rem;
-//     text-align: center;
-//     color: #fff;
-//     background: #ccc;
-//   }
-//   footer {
-//     position: absolute;
-//     left: 0;
-//     bottom: 1rem;
-//     height: 2rem;
-//     line-height: 2rem;
-//     z-index: 2;
-//   }
-// }
+.orderList {
+  padding: 25px;
+  font-size: 36px;
+}
 </style>

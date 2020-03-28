@@ -44,6 +44,20 @@
         </mt-picker>
       </mt-popup>
     </div>
+
+    <div class="chufa" @click="chooseAdress" v-if="isShow">
+      <div class="ji">寄</div>
+      <div class="info">
+        <div class="qus">
+          <span class="one">{{addrList.name}}</span>
+          <span class="two">{{addrList.phone}}</span>
+        </div>
+        <div class="ans">{{addrList. addr}}{{addrList.gate}}</div>
+      </div>
+    </div>
+    <div class="addAddressee" @click="addAddressee" v-if="isShow">添加地址</div>
+    
+
     <div class="footer">
       <div class="total">
         <div>合计</div>
@@ -84,6 +98,7 @@ export default {
       popupVisible: false, //弹框的显示隐藏
       saleType: "", //时间
       tellWords: "", //给小哥说的话
+      isShow:true,
       slots1: [
         {
           flex: 1,
@@ -110,21 +125,25 @@ export default {
         }
       ],
       isShow: false,
-      msg:'下单成功！',
+      msg: "下单成功！",
+      addrList:false,
     };
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
-    this.sendmsg = window.localStorage.getItem("sendmsg");
     this.getLngLatLocation();
-    let sendmsg = JSON.parse(store.getSession("sendmsg"));
+    const sendmsg = store.getSession("sendmsg");
+    const collectmsg = store.getSession("collectmsg");
     if (sendmsg) {
       this.sendname = sendmsg.name;
       this.sendphone = sendmsg.phone;
       this.sendaddress = sendmsg.addr + sendmsg.gate;
     } else {
       return;
+    }
+    if (collectmsg) {
+      this.isShow = false
+      this.addrList = collectmsg
     }
   },
   methods: {
@@ -171,6 +190,11 @@ export default {
         this.$router.push("./order");
       }, 1000);
       store.clearSession();
+    },
+    addAddressee() {
+      this.$router.push({
+        path: "./arriveAddress"
+      });
     }
   }
 };
@@ -324,6 +348,15 @@ export default {
         color: #ff6600;
       }
     }
+  }
+  .addAddressee {
+    width: 300px;
+    height: 80px;
+    text-align: center;
+    border: 1px solid blue;
+    border-radius: 30px;
+    line-height: 80px;
+    margin: 20px auto;
   }
   .footer {
     position: fixed;

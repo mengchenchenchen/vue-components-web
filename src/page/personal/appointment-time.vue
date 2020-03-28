@@ -45,25 +45,31 @@
       @ok="appointmentTimeChange"
     ></popup-picker>
     <popup-picker ref="valAdded" :slots="chooseRiderSlot" title="选择快递员" @ok="chooseRiderChange"></popup-picker>
+
+    <mc-success :msg="msg" v-if="isShow"></mc-success>
   </div>
 </template>
 
 <script>
 import McHeader from "@/components/header";
 import McFlex from "@comp/flex";
+import McSuccess from "@comp/success";
 import PopupPicker from "@comp/popup-picker";
 
+import store from "@/util/store";
 import api from "@/util/api";
 
 export default {
-  components: { McHeader, McFlex, PopupPicker },
+  components: { McHeader, McFlex, PopupPicker, McSuccess },
   data() {
     return {
       name: "",
       phone: "",
       address: "",
-      appointmentTime:'',
-      chooseRider:'',
+      appointmentTime: "",
+      chooseRider: "",
+      isShow: false, //成功的弹框 显隐
+      msg: "下单成功！",
       appointmentTimeSlot: [
         {
           flex: 1,
@@ -89,7 +95,7 @@ export default {
       chooseRiderSlot: [
         {
           flex: 1,
-          values: ['5元',"10元"],
+          values: ["5元", "10元"]
         }
       ],
       objectInfo: [
@@ -121,19 +127,19 @@ export default {
     get_rider_name() {
       api.post("/php-ci/index.php/test/rider_name").then(res => {
         if (res.status == 200) {
-            this.chooseRiderSlot[0].values = []
-          for(let i in res.data){
-              this.chooseRiderSlot[0].values.push(res.data[i].name)
+          this.chooseRiderSlot[0].values = [];
+          for (let i in res.data) {
+            this.chooseRiderSlot[0].values.push(res.data[i].name);
           }
         }
       });
     },
     appointmentTimeChange(values) {
-        this.appointmentTime = values[0] + values[1]
+      this.appointmentTime = values[0] + values[1];
       this.set_object_info("saleType", values[0] + values[1]);
     },
     chooseRiderChange(values) {
-        this.chooseRider = values[0]
+      this.chooseRider = values[0];
       this.set_object_info("chooseRider", values[0]);
     },
     set_object_info(name, value) {
@@ -149,16 +155,30 @@ export default {
         name: this.name,
         phone: this.phone,
         address: this.address,
-        appointmentTime:this.appointmentTime,
-        chooseRider:this.chooseRider,
+        appointmentTime: this.appointmentTime,
+        chooseRider: this.chooseRider
       };
-      console.log(params);
-      api.post("/php-ci/index.php/test/add_appointmentTime", params).then(res => {
-        console.log(res);
-        if (res.data.ret == 200) {
-          alert("预约成功！");
-        }
-      });
+      api
+        .post("/php-ci/index.php/test/add_appointmentTime", params)
+        .then(res => {
+          console.log(res);
+          if (res.data.ret == 200) {
+            this.isShow = true;
+            this.msg =
+              "您的订单已经被" +
+              this.chooseRider +
+              "同意，快递员将在" +
+              this.appointmentTime +
+              "上门，请您耐心等待！";
+            setInterval(() => {
+              this.isShow = false;
+              this.$router.push("./home");
+            }, 1000);
+            store.clearSession();
+
+            // alert("预约成功！");
+          }
+        });
     }
   }
 };

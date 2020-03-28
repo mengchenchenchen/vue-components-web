@@ -37,7 +37,7 @@ export default {
         { label: "待接单", value: 0 },
         { label: "送货中", value: 1 },
         { label: "异常单", value: 2 },
-        { label: "已完成", value: 3 }
+        { label: "去评价", value: 3 }
       ],
       isActive: 0, //显示  订单状态
       temp: []

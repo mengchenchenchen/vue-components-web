@@ -114,15 +114,15 @@ export default {
             this.$router.push("ItemInformation");
           }
         },
-        {
-          type: 0,
-          title: "预约上门时间",
-          name: "saleType",
-          value: "",
-          handler: () => {
-            this.$refs.aptTime.show = true;
-          }
-        },
+        // {
+        //   type: 0,
+        //   title: "预约上门时间",
+        //   name: "saleType",
+        //   value: "",
+        //   handler: () => {
+        //     this.$refs.aptTime.show = true;
+        //   }
+        // },
         {
           type: 0,
           title: "增值服务",
@@ -232,6 +232,14 @@ export default {
       this.set_object_info("money", values[0]);
     },
     getOrder() {
+      let currDate = new Date();
+      let year = currDate.getFullYear();
+      let month = currDate.getMonth() + 1 < 10 ? "0" + (currDate.getMonth() + 1): currDate.getMonth() + 1;
+      let day = currDate.getDate()<10 ? "0"+currDate.getDate() : currDate.getDate();
+      let date = year + month + day; 
+      let timestamp = Date.parse(currDate); 
+      let orderId = date + timestamp;
+
       const { totalMarks } = this;
       const { tellWords, goodsinfo } = this.get_object_info();
       const { sendmsg, collectmsg } = this.get_addr_list();
@@ -240,7 +248,9 @@ export default {
         provenance: sendmsg,
         destination: collectmsg,
         price: totalMarks,
-        remarks: tellWords
+        remarks: tellWords,
+        phone:this.addrList[0].subtitle,
+        orderNumber:orderId,
       };
       api
         .post("/php-ci/index.php/test/add_order", params)

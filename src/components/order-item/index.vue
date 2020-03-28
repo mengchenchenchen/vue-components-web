@@ -1,5 +1,5 @@
 <template>
-  <mc-flex style="margin-top:1rem;">
+  <mc-flex style="margin:1rem auto;border-bottom:1px solid #7f7f7f">
     <img src="@/assets/order.jpg" class="left-image" />
     <mc-flex column class="right-info">
       <span>{{item.info}}</span>

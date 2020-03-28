@@ -40,14 +40,15 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push({ path: "./customerIndex" });
+      this.$router.go(-1)
     },
     addAddress() {
       this.$router.push({ path: "./address" });
     },
     chooseAddress(item) {
+      console.log(item)
       store.setSession("collectmsg",JSON.stringify(item));
-      this.$router.push({ path: "./customerIndex" });
+      this.$router.go(-1)
     },
     getList() {
       api.post("/php-ci/index.php/test/address").then(res => {

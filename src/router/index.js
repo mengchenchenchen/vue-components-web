@@ -20,6 +20,8 @@ import AdminMine from "@/page/admin/adminMine"; //管理员 我的
 import PageNotFind from "@/page/page-not-find";//页面找不到
 import McFlexDemo from "@/components/flex/demo";
 import LogisticsDetails from "@/page/personal/logistics-details";//配送详情页面
+import evaluate from "@/page/personal/evaluate";//配送详情页面
+
 
 Vue.use(Router);
 
@@ -27,7 +29,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/home"
+      redirect: "/AppointmentTime"
     },
 
     //客户开始
@@ -95,6 +97,11 @@ const router = new Router({
       path: "/batchSend",
       name: "batchSend",
       component: batchSend
+    },
+    {
+      path: "/evaluate",
+      name: "evaluate",
+      component: evaluate
     },
     //客户下单结束
 

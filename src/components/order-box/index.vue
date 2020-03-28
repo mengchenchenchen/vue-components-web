@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-for="item in list" :key="item.id">
-      <status-bar :title="item.title" :status="get_status(item.status)" @click="handle(item.status)"></status-bar>
+    <div v-for="item in list" :key="item.name">
+      <status-bar :title="item.title" :status="get_status(item.status)" @click="handle(item)"></status-bar>
       <order-item :item="item"></order-item>
     </div>
   </div>
@@ -36,10 +36,18 @@ export default {
       }
       return temp;
     },
-    handle(status){
-      console.log(status)
-      if(status == 2){
+    handle(item){
+      console.log(item)
+      if(item.status == 2){
         this.$router.push('/distributionDetails')
+      }
+      if(item.status == 3){
+        this.$router.push({
+          path: '/evaluate',
+          query: {
+            orderNumber: item.orderNumber
+          }
+        })
       }
     }
   }
