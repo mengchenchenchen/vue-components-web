@@ -11,6 +11,7 @@
   </div>
 </template>
 
+
 <script>
 import FooterItem from "@/components/footerbox";
 import McHeader from "@/components/header";

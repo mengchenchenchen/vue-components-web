@@ -1,115 +1,176 @@
 <template>
-  <div class="mainbox">
+  <div>
     <mc-header bg="#1a489d" :size="40" padding="15px">
       <i slot="left" class="el-icon-arrow-left" @click="back"></i>
-      <span slot="center" class="text-bold">选择发件地址</span>
+      <span slot="center" class="text-bold">快递上门</span>
     </mc-header>
+
     <div class="logo">
-      <img src="../../assets/paisonglogo.jpg" alt />
-    </div>
-    <div class="chufa" @click="chooseAdress">
-      <div class="ji">寄</div>
-      <div class="info">
-        <div class="qus">
-          <span class="one">{{sendname}}</span>
-          <span class="two">{{sendphone}}</span>
-        </div>
-        <div class="ans">{{sendaddress}}</div>
-      </div>
-    </div>
-    <div class="anthor_info">
-      <div class="time">
-        <div class="before">预约上门时间</div>
-        <div class="after" @click="popupVisible1=true">
-          <input type="text" v-model="saleType" />
-          <i class="el-icon-arrow-right"></i>
-        </div>
-      </div>
-      <div class="tell">
-        <div class="before">对小哥说</div>
-        <textarea name id cols="44" rows="4" v-model="tellWords"></textarea>
-      </div>
-      <mt-popup
-        v-model="popupVisible1"
-        popup-transition="popup-fade"
-        closeOnClickModal="true"
-        position="bottom"
-      >
-        <mt-picker :slots="slots1" @change="onValuesChange1" showToolbar>
-          <div class="picker-toolbar-title">
-            <div class="usi-btn-cancel" @click="popupVisible1 = !popupVisible1">取消</div>
-            <div class>预约上门时间</div>
-            <div class="usi-btn-sure" @click="sure1()">确定</div>
-          </div>
-        </mt-picker>
-      </mt-popup>
+      <img :src="paisonglogo" alt />
     </div>
 
-    <div class="chufa" @click="chooseAdress" v-if="isShow">
-      <div class="ji">寄</div>
-      <div class="info">
-        <div class="qus">
-          <span class="one">{{addrList.name}}</span>
-          <span class="two">{{addrList.phone}}</span>
-        </div>
-        <div class="ans">{{addrList. addr}}{{addrList.gate}}</div>
+    <mc-flex
+      align="center"
+      style="margin: 0rem .5rem;border-radius:.2rem;padding:.5rem 0rem;"
+      v-for="item in addrList"
+      :key="item.name"
+      @click="$router.push(item.router)"
+    >
+      <span class="icon" :style="{backgroundColor:item.bg}">{{item.flag}}</span>
+      <mc-flex column style="margin-left:1rem;border-bottom: 1px solid #ededed;flex:1;">
+        <mc-flex>
+          <span>{{item.title}}</span>
+          <span>{{item.subtitle}}</span>
+        </mc-flex>
+        <span style="color: #a9a9a9;font-size:.5rem;margin:.3rem 0rem;">{{item.tip}}</span>
+      </mc-flex>
+    </mc-flex>
+    <div v-if="true">
+      <div v-for="(item,index) in addAddress" :key="index">
+        <!-- <span class="icon" :style="{backgroundColor:item.bg}">{{item.flag}}</span> -->
+        <mc-flex column style="margin-left:1rem;border-bottom: 1px solid #ededed;flex:1;">
+          <mc-flex>
+            <span>{{item.title}}</span>
+            <span>{{item.subtitle}}</span>
+          </mc-flex>
+          <span style="color: #a9a9a9;font-size:.5rem;margin:.3rem 0rem;">{{item.tip}}</span>
+        </mc-flex>
       </div>
     </div>
-    <div class="addAddressee" @click="addAddressee" v-if="isShow">添加地址</div>
-    
+    <div class="addOrder" @click="addOrder">添加地址</div>
+
+    <div v-for="item in objectInfo" :key="item.name">
+      <mc-flex
+        justify="space-between"
+        style="margin: 0rem .5rem;padding:.5rem;"
+        v-if="item.type===0"
+        @click="item.handler"
+      >
+        <span style="color:#747474">{{item.title}}</span>
+        <mc-flex>
+          <span style="font-size:.5rem;margin: 0rem .5rem;">{{item.value}}</span>
+          <i class="el-icon-arrow-right"></i>
+        </mc-flex>
+      </mc-flex>
+      <mc-flex column v-else style="margin: 0rem .5rem;padding:.5rem;">
+        <span style="color:#747474;margin:.5rem 0rem;">{{item.title}}</span>
+        <textarea rows="4" style="width:90%;" v-model="item.value"></textarea>
+      </mc-flex>
+    </div>
+    <popup-picker
+      ref="aptTime"
+      :slots="appointmentTimeSlot"
+      title="预约上门时间"
+      @ok="appointmentTimeChange"
+    ></popup-picker>
+    <popup-picker ref="valAdded" :slots="valueAddedSlot" title="增值服务" @ok="valueAddedChange"></popup-picker>
 
     <div class="footer">
       <div class="total">
-        <div>合计</div>
-        <div>7元</div>
+        <div>合计{{ totalMarks }}元</div>
+        <div class="label">基础价格7元</div>
       </div>
       <div @click="getOrder">立即下单</div>
     </div>
-
     <mc-success :msg="msg" v-if="isShow"></mc-success>
   </div>
 </template>
 
 <script>
-import FooterItem from "../../components/footerbox";
-import McHeader from "@/components/header";
-import McSuccess from "@/components/success";
-
-import { MessageBox, Toast, Picker, Popup, Header } from "mint-ui";
-
+import FooterItem from "@comp/footerbox";
+import McHeader from "@comp/header";
+import McSuccess from "@comp/success";
+import McFlex from "@comp/flex";
+import PopupPicker from "@comp/popup-picker";
 import store from "@/util/store";
 import api from "@/util/api";
 
 export default {
-  name: "HelloWorld",
   components: {
     FooterItem,
     McHeader,
-    McSuccess
+    McSuccess,
+    McFlex,
+    PopupPicker
   },
   data() {
     return {
-      sendname: "寄往哪里？",
-      sendphone: "",
-      sendaddress: "点击选择寄件地址",
-      value: "", //时间选择
-      inputValue: "", //备注的内容
-      popupVisible1: false, //弹框的显示隐藏
-      popupVisible: false, //弹框的显示隐藏
-      saleType: "", //时间
-      tellWords: "", //给小哥说的话
-      isShow:true,
-      slots1: [
+      paisonglogo: require("@/assets/paisonglogo.jpg"),
+      addAddress: [
+         {
+          name: "collectmsg",
+          flag: "收",
+          title: "寄到哪里？",
+          subtitle: "",
+          tip: "点击选择收件人信息",
+          bg: "#ebc95d",
+          router: "arriveAddress"
+        }
+      ],
+      addrList: [
+        {
+          name: "sendmsg",
+          flag: "寄",
+          title: "从哪里寄？",
+          subtitle: "",
+          tip: "点击选择寄件人信息",
+          bg: "#3478f6",
+          router: "sendAddress"
+        },
+        {
+          name: "collectmsg",
+          flag: "收",
+          title: "寄到哪里？",
+          subtitle: "",
+          tip: "点击选择收件人信息",
+          bg: "#ebc95d",
+          router: "arriveAddress"
+        }
+      ],
+      objectInfo: [
+        {
+          type: 0,
+          title: "物品信息",
+          name: "goodsinfo",
+          value: "",
+          handler: () => {
+            this.$router.push("ItemInformation");
+          }
+        },
+        {
+          type: 0,
+          title: "增值服务",
+          name: "money",
+          value: "",
+          handler: () => {
+            this.$refs.valAdded.show = true;
+          }
+        },
+        {
+          type: 1,
+          title: "对小哥说",
+          name: "tellWords",
+          value: "",
+          handler: () => {}
+        }
+      ],
+
+      msg: "下单成功！",
+      valueAddedSlot: [
+        {
+          flex: 1,
+          values: ["2元", "5元", "10元", "50元"]
+        }
+      ],
+      appointmentTimeSlot: [
         {
           flex: 1,
           values: ["今天", "明天", "后天"],
-          className: "slot1",
           textAlign: "center"
         },
         {
           divider: true,
-          content: "-",
-          className: "slot2"
+          content: "-"
         },
         {
           flex: 1,
@@ -120,265 +181,197 @@ export default {
             "14:00-16:00",
             "16:00-16:00"
           ],
-          className: "slot3",
           textAlign: "center"
         }
       ],
-      isShow: false,
-      msg: "下单成功！",
-      addrList:false,
+      isShow: false //成功的弹框 显隐
     };
   },
-  computed: {},
+
   mounted() {
-    this.getLngLatLocation();
-    const sendmsg = store.getSession("sendmsg");
-    const collectmsg = store.getSession("collectmsg");
-    if (sendmsg) {
-      this.sendname = sendmsg.name;
-      this.sendphone = sendmsg.phone;
-      this.sendaddress = sendmsg.addr + sendmsg.gate;
-    } else {
-      return;
-    }
-    if (collectmsg) {
-      this.isShow = false
-      this.addrList = collectmsg
-    }
+    this.init_object_info();
+    this.addr_list();
+    this.get_address();
   },
   methods: {
+    addr_list() {
+      const addrList = store.getSession("addrList");
+      const collectmsg = store.getSession("collectmsg");
+      const sendmsg = store.getSession("sendmsg");
+      if (sendmsg) {
+        const send_addr = this.addrList[0];
+        send_addr.title = sendmsg.name;
+        send_addr.subtitle = sendmsg.phone;
+        send_addr.tip = sendmsg.addr + sendmsg.gate;
+      }
+      if (addrList && collectmsg) {
+        this.addrList = addrList;
+        this.addAddress = store.getSession("addAddress");
+        this.addAddress.push(collectmsg);
+        console.log(this.addAddress)
+      } else if (collectmsg) {
+        const arrive_addr = this.addrList[1];
+        arrive_addr.title = collectmsg.name;
+        arrive_addr.subtitle = collectmsg.phone;
+        arrive_addr.tip = collectmsg.addr + sendmsg.gate;
+      }
+    },
+    init_object_info() {
+      const goodsinfo = store.getSession("goodsinfo");
+      this.set_object_info("goodsinfo", goodsinfo);
+    },
+    set_object_info(name, value) {
+      for (const item of this.objectInfo) {
+        if (item.name === name) {
+          item.value = value;
+          break;
+        }
+      }
+    },
+    get_object_info() {
+      const temp = {};
+      for (const item of this.objectInfo) {
+        temp[item.name] = item.value;
+      }
+      return temp;
+    },
+    get_address() {},
+    get_addr_list() {
+      const temp = {};
+      for (const item of this.addrList) {
+        temp[item.name] = item.tip;
+      }
+      return temp;
+    },
     back() {
-      window.history.go(-1);
+      this.$router.back();
     },
-    chooseAdress() {
-      this.$router.push({
-        path: "./sendAddress"
-      });
+    appointmentTimeChange(values) {
+      this.set_object_info("saleType", values[0] + values[1]);
     },
-    getLngLatLocation() {
-      let _this = this;
-      AMap.plugin("AMap.CitySearch", function() {
-        var citySearch = new AMap.CitySearch();
-        citySearch.getLocalCity(function(status, result) {
-          if (status === "complete" && result.info === "OK") {
-            // 查询成功，result即为当前所在城市信息
-            //   console.log('通过ip获取当前城市：',result)
-            _this.city = result.city;
-          }
-        });
-      });
-    },
-    onValuesChange1(picker, values) {
-      this.message = values[0] + values[1];
-    },
-    sure1() {
-      this.saleType = this.message;
-      this.popupVisible1 = false;
+    valueAddedChange(values) {
+      this.set_object_info("money", values[0]);
     },
     getOrder() {
-      let params = {
-        title: "",
-        provenance: "",
-        destination: this.sendaddress,
-        price: 7,
-        remarks: this.tellWords
+      let currDate = new Date();
+      let year = currDate.getFullYear();
+      let month =
+        currDate.getMonth() + 1 < 10
+          ? "0" + (currDate.getMonth() + 1)
+          : currDate.getMonth() + 1;
+      let day =
+        currDate.getDate() < 10 ? "0" + currDate.getDate() : currDate.getDate();
+      let date = year + month + day;
+      let timestamp = Date.parse(currDate);
+      let orderId = date + timestamp;
+
+      const { totalMarks } = this;
+      const { tellWords, goodsinfo } = this.get_object_info();
+      const { sendmsg, collectmsg } = this.get_addr_list();
+      const params = {
+        title: goodsinfo,
+        provenance: sendmsg,
+        destination: collectmsg,
+        price: totalMarks,
+        remarks: tellWords,
+        phone: this.addrList[0].subtitle,
+        orderNumber: orderId
       };
-      api.post("/php-ci/index.php/test/add_order", params).then(res => {});
+      api
+        .post("/php-ci/index.php/test/add_order", params)
+        .then(res => {
+          // console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
       this.isShow = true;
-      setInterval(() => {
+      setTimeout(() => {
         this.isShow = false;
-        this.$router.push("./order");
+        this.$router.push("order");
       }, 1000);
       store.clearSession();
     },
-    addAddressee() {
-      this.$router.push({
-        path: "./arriveAddress"
-      });
+    addOrder() {
+      store.setSession("addrList", JSON.stringify(this.addrList));
+      store.setSession("addAddress", JSON.stringify(this.addAddress));
+      this.$router.push("./arriveAddress");
+    }
+  },
+  computed: {
+    totalMarks() {
+      let totalmoney = 7;
+      const { money } = this.get_object_info();
+      if (money) {
+        totalmoney = parseFloat(money) + parseFloat(totalmoney);
+      } else {
+        totalmoney = 7;
+      }
+      return parseFloat(totalmoney);
     }
   }
 };
 </script>
 
-<style lang="less">
-.mainbox {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: #ececec;
-  .tab {
-    font-size: 40px;
-    padding: 40px 20px 20px;
-    border: 1px solid #fff;
-    background-color: #1a489d;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    div,
-    i {
-      flex: 1;
-    }
-    i {
-      text-align: left;
-    }
-    .bring {
-      text-align: center;
-    }
-  }
-  .logo {
-    margin-bottom: 20px;
-    img {
-      width: 100%;
-    }
-  }
-  .chufa,
-  .daoda {
-    width: 95%;
-    background-color: #fff;
-    margin: auto;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    padding: 20px;
-    .ji {
-      font-size: 28px;
-      width: 60px;
-      height: 60px;
-      text-align: center;
-      box-sizing: border-box;
-      padding-top: 10px;
-      background-color: #3478f6;
-      color: #fff;
-      border-radius: 60px;
-      margin-right: 30px;
-    }
-    .shou {
-      font-size: 28px;
-      width: 60px;
-      height: 60px;
-      text-align: center;
-      box-sizing: border-box;
-      padding-top: 10px;
-      background-color: #ebc95d;
-      color: #000;
-      border-radius: 60px;
-      margin-right: 30px;
-    }
-    .info {
-      width: 100%;
-      box-sizing: border-box;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #ededed;
-      .qus {
-        margin-bottom: 10px;
-        .one {
-          font-size: 34px;
-          color: #1e1e1e;
-        }
-      }
-      .ans {
-        font-size: 28px;
-        color: #a9a9a9;
-      }
-    }
-  }
-  .anthor_info {
-    width: 95%;
-    background-color: #fff;
-    margin: auto;
-    border-radius: 10px;
-    margin-top: 20px;
-    box-sizing: border-box;
-    padding: 20px;
-    .time {
-      border-bottom: 1px solid #eeeeee;
-      display: flex;
-      justify-content: space-between;
-      box-sizing: border-box;
-      padding: 20px 10px;
-      .before {
-        color: #747474;
-      }
-      .after {
-        text-align: right;
-        width: 70%;
-        input {
-          width: 80%;
-          text-align: right;
-          padding: 10px;
-          border: none;
-        }
-        input:focus {
-          outline: none;
-          color: transparent;
-        }
-      }
-    }
-    .tell {
-      border-bottom: 1px solid #eeeeee;
-      box-sizing: border-box;
-      padding: 20px 10px;
-      .before {
-        color: #747474;
-        margin-bottom: 20px;
-      }
-      textarea {
-        border-radius: 5px;
-        background-color: rgba(241, 241, 241, 0.98);
-        padding: 10px;
-        resize: none;
-      }
-    }
-    .mint-popup-bottom {
-      width: 100%;
-    }
-    .picker-toolbar {
-      height: 200px;
-    }
-    .picker-toolbar-title {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      align-items: center;
-      height: 100%;
-      line-height: 100%;
-      .usi-btn-cancel,
-      .usi-btn-sure {
-        color: #ff6600;
-      }
-    }
-  }
-  .addAddressee {
-    width: 300px;
-    height: 80px;
-    text-align: center;
-    border: 1px solid blue;
-    border-radius: 30px;
-    line-height: 80px;
-    margin: 20px auto;
-  }
-  .footer {
-    position: fixed;
-    bottom: 0;
+<style lang="less" scoped>
+.logo {
+  margin-bottom: 20px;
+  img {
     width: 100%;
-    height: 100px;
-    border-radius: 10px;
-    background-color: #1a489d;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  }
+}
+.icon {
+  font-size: 28px;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  box-sizing: border-box;
+  padding-top: 10px;
+  background-color: #3478f6;
+  color: #fff;
+  border-radius: 60px;
+  margin-left: 20px;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 5px;
+  background-color: rgba(241, 241, 241, 0.98);
+  padding: 10px;
+  resize: none;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  background-color: #1a489d;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  div {
+    flex: 1;
+    text-align: center;
+  }
+  .total {
     div {
-      flex: 1;
-      text-align: center;
+      display: inline-block;
+      margin-right: 20px;
     }
-    .total {
-      div {
-        display: inline-block;
-        margin-right: 20px;
-      }
+    .label {
+      font-size: 16px;
     }
   }
+}
+.addOrder {
+  text-align: center;
+  width: 200px;
+  padding: 20px;
+  border: 1px solid blue;
+  border-radius: 20px;
+  margin: auto;
 }
 </style>

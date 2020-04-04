@@ -35,7 +35,7 @@ export default {
           text: "我的",
           selected: my_icon_on,
           unselect: my_icon_off,
-          route: "AdminMine"
+          route: "adminMine"
         }
       ]
     };

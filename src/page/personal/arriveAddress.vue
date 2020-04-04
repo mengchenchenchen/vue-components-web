@@ -46,7 +46,6 @@ export default {
       this.$router.push({ path: "./address" });
     },
     chooseAddress(item) {
-      console.log(item)
       store.setSession("collectmsg",JSON.stringify(item));
       this.$router.go(-1)
     },

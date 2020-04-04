@@ -21,6 +21,7 @@ import PageNotFind from "@/page/page-not-find";//页面找不到
 import McFlexDemo from "@/components/flex/demo";
 import LogisticsDetails from "@/page/personal/logistics-details";//配送详情页面
 import evaluate from "@/page/personal/evaluate";//配送详情页面
+import receipt from "@/page/personal/receipt";//配送详情页面
 
 
 Vue.use(Router);
@@ -102,6 +103,11 @@ const router = new Router({
       path: "/evaluate",
       name: "evaluate",
       component: evaluate
+    },
+    {
+      path: "/receipt",
+      name: "receipt",
+      component: receipt
     },
     //客户下单结束
 
