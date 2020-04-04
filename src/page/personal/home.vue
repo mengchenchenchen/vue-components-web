@@ -18,6 +18,8 @@
         @click.stop="goto(item.value)"
       ></home-box>
     </mc-flex>
+    <p @click="handleCount">{{count}}</p>
+    <!-- <p>{{name}}</p> -->
     <FooterItem></FooterItem>
   </div>
 </template>
@@ -28,12 +30,11 @@ import McHeader from "@/components/header";
 import HomeBox from "@/components/home-box";
 import McFlex from "@/components/flex";
 
-
 import kuaidiyuan from "@/assets/kuaidiyuan.png";
 import search from "@/assets/search_logo.png";
 import jijian from "@/assets/jijian.png";
 import dingdan from "@/assets/dingdan.png";
-
+import { mapState } from "vuex";
 export default {
   components: {
     FooterItem,
@@ -72,11 +73,19 @@ export default {
       ]
     };
   },
-  computed: {},
+  computed: {
+    // ...mapState(["count", "name"]),
+    count(){
+      return this.$store.state.count
+    }
+  },
   mounted() {},
   methods: {
     goto(path) {
       this.$router.push(path);
+    },
+    handleCount(){
+      this.$store.commit('add',{name:'zoe'})
     }
   }
 };
