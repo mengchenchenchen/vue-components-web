@@ -2,7 +2,7 @@
   <div>
     <mc-header bg="#1a489d" :size="40" padding="15px">
       <i slot="left" class="el-icon-arrow-left" @click="back"></i>
-      <span slot="center" class="text-bold">快递上门</span>
+      <span slot="center" class="text-bold">批量寄件</span>
     </mc-header>
 
     <div class="logo">
@@ -25,7 +25,7 @@
         <span style="color: #a9a9a9;font-size:.5rem;margin:.3rem 0rem;">{{item.tip}}</span>
       </mc-flex>
     </mc-flex>
-    <div v-if="true">
+    <div v-if="false">
       <div v-for="(item,index) in addAddress" :key="index">
         <!-- <span class="icon" :style="{backgroundColor:item.bg}">{{item.flag}}</span> -->
         <mc-flex column style="margin-left:1rem;border-bottom: 1px solid #ededed;flex:1;">

@@ -18,8 +18,6 @@
         @click.stop="goto(item.value)"
       ></home-box>
     </mc-flex>
-    <p @click="handleCount">{{count}}</p>
-    <!-- <p>{{name}}</p> -->
     <FooterItem></FooterItem>
   </div>
 </template>
@@ -89,6 +87,7 @@ export default {
     }
   }
 };
+
 </script>
 
 <style lang="less">

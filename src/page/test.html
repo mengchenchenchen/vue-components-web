@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>ajax</title>
 </head>
 <body>
-    <div class="test">1111</div>
-    <script>
-        window.setTimeout(function(){
-                alert('11111')
-            },5000)
-    </script>
+
 </body>
+<script>
+const jelly = {
+    name:"jelly",
+    age:30,
+    todos:[
+        {name:'go shopping',completed:false},
+        {name:'go work',completed:true},
+        {name:'go home',completed:true},
+    ]
+}
+
+const template = `
+    <ul>
+    ${jelly.todos.map(todo=>
+    `<li>
+    ${todo.name} ${todo.completed ? 'yes' : 'no'}
+    </li>`)
+    .join('')}
+    </ul>
+`
+
+document.body.innerHTML = template
+</script>
+
 </html>

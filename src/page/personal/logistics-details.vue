@@ -1,6 +1,7 @@
 <template>
   <div>
     <mc-header bg="#1a489d" padding="15px">
+      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
       <span slot="center" class="text-bold" style="position:relative;left:0.5rem;">物流详情</span>
     </mc-header>
     <mc-flex style="margin:1rem .5rem;">
@@ -83,7 +84,10 @@ export default {
     get_date(val) {
       const date = new Date(val);
       return date.getTime();
-    }
+    },
+    back() {
+      this.$router.back();
+    },
   }
 };
 </script>
