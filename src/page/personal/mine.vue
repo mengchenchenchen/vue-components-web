@@ -1,7 +1,6 @@
 <template>
   <div class="mainbox">
-    <mc-header bg="#1a489d" padding="15px">
-      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+    <mc-header>
       <span slot="center" class="text-bold">用户中心</span>
     </mc-header>
     <div class="header">
@@ -42,17 +41,18 @@ export default {
     return {
       adatar: "", //用户头像
       phone: "", //用户手机号
-      username: "" ,//用户名
+      username: "" //用户名
     };
   },
   mounted() {
-    this.phone = localStorage.phone;
-    let params = {
-      telephone: this.phone
-    };
-    api.post("/php-ci/index.php/test/user_info", params).then(res => {
-      this.username = res.data[0].name;
-    });
+    this.$store.commit("getUserInfo");
+    const { phone } = this.$store.state.user;
+
+    api
+      .post("/php-ci/index.php/test/user_info", { telephone: phone })
+      .then(res => {
+        this.username = res.data[0].name;
+      });
   },
   methods: {
     //头像选择

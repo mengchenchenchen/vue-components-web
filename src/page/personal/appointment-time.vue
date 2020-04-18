@@ -1,51 +1,31 @@
 <template>
   <div>
-    <mc-header bg="#1a489d" :size="40" padding="15px">
+    <mc-header>
       <span slot="center" class="text-bold">预约时间</span>
     </mc-header>
-
-    <div class="name">
-      <div>姓名：</div>
-      <input type="text" placeholder="请填写姓名" v-model="name" />
-    </div>
-    <div class="phone">
-      <div>电话：</div>
-      <input type="text" placeholder="请填写发货人电话" v-model="phone" />
-    </div>
-    <div class="address">
-      <div>详细地址：</div>
-      <input type="text" placeholder="请填写详细地址" v-model="address" />
-    </div>
-
-    <div v-for="item in objectInfo" :key="item.name">
-      <mc-flex
-        justify="space-between"
-        style="margin: 0rem .5rem;padding:.5rem"
-        v-if="item.type===0"
-        @click="item.handler"
-      >
-        <span style="color:#747474;font-size:1.2rem;">{{item.title}}</span>
-        <mc-flex align="center" style="height:100%">
-          <span style="font-size:1.2rem;margin: 0rem .5rem;">{{item.value}}</span>
-          <i class="el-icon-arrow-right"></i>
-        </mc-flex>
-      </mc-flex>
-      <mc-flex column v-else style="margin: 0rem .5rem;padding:.5rem;">
-        <span style="color:#747474;margin:.5rem 0rem;">{{item.title}}</span>
-        <textarea rows="4" style="width:90%;" v-model="item.value"></textarea>
-      </mc-flex>
+    <input-text
+      class="mt-2"
+      v-for="info in userInfoConfig"
+      :key="info.label"
+      :name="info.name"
+      :placeholder="info.placeholder"
+      v-model="info.value"
+    ></input-text>
+    <div class="mt-2" v-for="item in appointmentInfoConfig" :key="item.name">
+      <card-cell :item="item"></card-cell>
     </div>
     <div class="footer" @click="preserve">
       <div>立即预约</div>
     </div>
+
     <popup-picker
       ref="aptTime"
       :slots="appointmentTimeSlot"
       title="预约上门时间"
       @ok="appointmentTimeChange"
     ></popup-picker>
-    <popup-picker ref="valAdded" :slots="chooseRiderSlot" title="选择快递员" @ok="chooseRiderChange"></popup-picker>
 
+    <popup-picker ref="pickRider" :slots="chooseRiderSlot" title="选择快递员" @ok="chooseRiderChange"></popup-picker>
     <mc-success :msg="msg" v-if="isShow"></mc-success>
   </div>
 </template>
@@ -55,21 +35,37 @@ import McHeader from "@/components/header";
 import McFlex from "@comp/flex";
 import McSuccess from "@comp/success";
 import PopupPicker from "@comp/popup-picker";
-
+import InputText from "@comp/input-text";
+import CardCell from "@comp/card-cell";
 import store from "@/util/store";
 import api from "@/util/api";
-
+import util from "@/util/index";
 export default {
-  components: { McHeader, McFlex, PopupPicker, McSuccess },
+  components: { McHeader, McFlex, PopupPicker, McSuccess, InputText, CardCell },
   data() {
     return {
-      name: "",
-      phone: "",
-      address: "",
-      appointmentTime: "",
-      chooseRider: "",
+      userInfoConfig: [
+        {
+          name: "姓名",
+          placeholder: "请填写姓名",
+          label: "name",
+          value: ""
+        },
+        {
+          name: "电话",
+          placeholder: "请填写发货人电话",
+          label: "phone",
+          value: ""
+        },
+        {
+          name: "详细地址",
+          placeholder: "请填写详细地址",
+          label: "address",
+          value: ""
+        }
+      ],
       isShow: false, //成功的弹框 显隐
-      msg: "下单成功！",
+      msg: "",
       appointmentTimeSlot: [
         {
           flex: 1,
@@ -92,17 +88,12 @@ export default {
           textAlign: "center"
         }
       ],
-      chooseRiderSlot: [
-        {
-          flex: 1,
-          values: ["5元", "10元"]
-        }
-      ],
-      objectInfo: [
+      riderList: [],
+      appointmentInfoConfig: [
         {
           type: 0,
           title: "预约上门时间",
-          name: "saleType",
+          name: "appointmentTime",
           value: "",
           handler: () => {
             this.$refs.aptTime.show = true;
@@ -114,7 +105,7 @@ export default {
           name: "chooseRider",
           value: "",
           handler: () => {
-            this.$refs.valAdded.show = true;
+            this.$refs.pickRider.show = true;
           }
         }
       ]
@@ -122,28 +113,62 @@ export default {
   },
   mounted() {
     this.get_rider_name();
+    this.load_user_info();
+  },
+  computed: {
+    userInfo() {
+      return this.userInfoConfig.reduce((acc, cur) => {
+        acc[cur.label] = cur.value;
+        return acc;
+      }, {});
+    },
+    chooseRiderSlot() {
+      return [
+        {
+          flex: 1,
+          values: this.riderList
+        }
+      ];
+    },
+    appointmentInfo() {
+      return this.appointmentInfoConfig.reduce((acc, cur) => {
+        acc[cur.name] = cur.value;
+        return acc;
+      }, {});
+    }
   },
   methods: {
+    load_user_info() {
+      this.$store.commit("getUserInfo");
+      const phone_config = this.userInfoConfig.filter(
+        val => val.label === "phone"
+      )[0];
+      const { phone } = this.$store.state.user;
+      if (phone_config) {
+        phone_config.value = phone;
+      }
+    },
     get_rider_name() {
       api.post("/php-ci/index.php/test/rider_name").then(res => {
         if (res.status == 200) {
-          this.chooseRiderSlot[0].values = [];
+          this.riderList = [];
           for (let i in res.data) {
-            this.chooseRiderSlot[0].values.push(res.data[i].name);
+            this.riderList.push(res.data[i].name);
           }
         }
       });
     },
     appointmentTimeChange(values) {
-      this.appointmentTime = values[0] + values[1];
-      this.set_object_info("saleType", values[0] + values[1]);
+      this.updateAppointmentInfoConfig(
+        "appointmentTime",
+        values[0] + values[1]
+      );
     },
     chooseRiderChange(values) {
-      this.chooseRider = values[0];
-      this.set_object_info("chooseRider", values[0]);
+      this.updateAppointmentInfoConfig("chooseRider", values[0]);
     },
-    set_object_info(name, value) {
-      for (const item of this.objectInfo) {
+    updateAppointmentInfoConfig(name, value) {
+      for (const item of this.appointmentInfoConfig) {
         if (item.name === name) {
           item.value = value;
           break;
@@ -151,59 +176,52 @@ export default {
       }
     },
     preserve() {
-      let params = {
-        name: this.name,
-        phone: this.phone,
-        address: this.address,
-        appointmentTime: this.appointmentTime,
-        chooseRider: this.chooseRider
+      const { name, phone, address } = this.userInfo;
+      const { appointmentTime, chooseRider } = this.appointmentInfo;
+      const params = {
+        name,
+        phone,
+        address,
+        appointmentTime,
+        chooseRider
       };
-      api
-        .post("/php-ci/index.php/test/add_appointmentTime", params)
-        .then(res => {
-          console.log(res);
-          if (res.data.ret == 200) {
-            this.isShow = true;
-            this.msg =
-              "您的订单已经被" +
-              this.chooseRider +
-              "同意，快递员将在" +
-              this.appointmentTime +
-              "上门，请您耐心等待！";
-            setInterval(() => {
-              this.isShow = false;
-              this.$router.push("./home");
-            }, 1000);
-            store.clearSession();
-
-            // alert("预约成功！");
-          }
-        });
+      const empty = util.check_empty(params);
+      if (empty) {
+        this.isShow = true;
+        this.msg = "您有信息未填写";
+        setTimeout(() => {
+          this.isShow = false;
+        }, 1000);
+      } else {
+        api
+          .post("/php-ci/index.php/test/add_appointmentTime", params)
+          .then(res => {
+            if (res.data.ret == 200) {
+              this.isShow = true;
+              this.msg = `您的订单已经被 ${chooseRider} 同意，快递员将在 ${appointmentTime} 上门，请您耐心等待！`;
+              setTimeout(() => {
+                this.isShow = false;
+                this.$router.push("home");
+              }, 1000);
+              this.$store.commit("updateUserInfo", { name, phone, address });
+            } else {
+              this.msg = "请求失败，请稍后再试";
+              this.isShow = true;
+              setTimeout(() => {
+                this.isShow = false;
+              }, 1000);
+            }
+          });
+      }
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.name,
-.phone,
-.address {
-  background-color: #fff;
-  box-sizing: border-box;
-  padding: 30px 20px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-  input {
-    border: none;
-    padding: 20px;
-    font-size: 36px;
-  }
-}
 .footer {
   position: fixed;
-  bottom: 0;
+  bottom: 0.2rem;
   height: 80px;
   line-height: 80px;
   width: 100%;

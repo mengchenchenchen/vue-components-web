@@ -30,7 +30,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/AppointmentTime"
+      redirect: "/appointment-time"
     },
 
     //客户开始
@@ -55,8 +55,8 @@ const router = new Router({
       component: arriveAddress
     },
     {
-      path: "/AppointmentTime",
-      name: "AppointmentTime",
+      path: "/appointment-time",
+      name: "appointment-time",
       component: AppointmentTime
     },
     {

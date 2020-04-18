@@ -1,7 +1,6 @@
 <template>
   <div class="mainbox">
-    <mc-header bg="#1a489d" :size="40" padding="15px">
-      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+    <mc-header back>
       <span slot="center" class="text-bold">选择发件地址</span>
     </mc-header>
     <div
@@ -41,16 +40,12 @@ export default {
     this.getList();
   },
   methods: {
-    back() {
-      window.history.go(-1);
-    },
     addAddress() {
       this.$router.push({ path: "./address" });
     },
     chooseAddress(item) {
-      let sendmsg = [];
       store.setSession("sendmsg", item);
-      window.history.go(-1);
+      this.$router.back()
     },
     getList() {
       api.post("/php-ci/index.php/test/address").then(res => {
@@ -102,7 +97,7 @@ body {
   }
   .footer {
     position: fixed;
-    bottom: 0;
+    bottom: 2px;
     height: 80px;
     line-height: 80px;
     width: 100%;

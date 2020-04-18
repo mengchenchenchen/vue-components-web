@@ -1,12 +1,11 @@
 <template>
   <div>
-    <mc-header bg="#1a489d" :size="40" padding="15px">
-      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+    <mc-header back>
       <span slot="center" class="text-bold">快递上门</span>
     </mc-header>
 
     <div class="logo">
-      <img :src="paisonglogo" alt />
+      <img :src="paisonglogo" />
     </div>
 
     <mc-flex
@@ -27,6 +26,9 @@
     </mc-flex>
 
     <div v-for="item in objectInfo" :key="item.name">
+      <card-cell :item="item"></card-cell>
+
+      <!--       
       <mc-flex
         justify="space-between"
         style="margin: 0rem .5rem;padding:.5rem;"
@@ -42,7 +44,7 @@
       <mc-flex column v-else style="margin: 0rem .5rem;padding:.5rem;">
         <span style="color:#747474;margin:.5rem 0rem;">{{item.title}}</span>
         <textarea rows="4" style="width:90%;" v-model="item.value"></textarea>
-      </mc-flex>
+      </mc-flex>-->
     </div>
     <popup-picker
       ref="aptTime"
@@ -72,6 +74,7 @@ import McFlex from "@comp/flex";
 import PopupPicker from "@comp/popup-picker";
 import store from "@/util/store";
 import api from "@/util/api";
+import CardCell from "@comp/card-cell";
 
 export default {
   components: {
@@ -79,7 +82,8 @@ export default {
     McHeader,
     McSuccess,
     McFlex,
-    PopupPicker
+    PopupPicker,
+    CardCell
   },
   data() {
     return {
@@ -234,10 +238,14 @@ export default {
     getOrder() {
       let currDate = new Date();
       let year = currDate.getFullYear();
-      let month = currDate.getMonth() + 1 < 10 ? "0" + (currDate.getMonth() + 1): currDate.getMonth() + 1;
-      let day = currDate.getDate()<10 ? "0"+currDate.getDate() : currDate.getDate();
-      let date = year + month + day; 
-      let timestamp = Date.parse(currDate); 
+      let month =
+        currDate.getMonth() + 1 < 10
+          ? "0" + (currDate.getMonth() + 1)
+          : currDate.getMonth() + 1;
+      let day =
+        currDate.getDate() < 10 ? "0" + currDate.getDate() : currDate.getDate();
+      let date = year + month + day;
+      let timestamp = Date.parse(currDate);
       let orderId = date + timestamp;
 
       const { totalMarks } = this;
@@ -249,8 +257,8 @@ export default {
         destination: collectmsg,
         price: totalMarks,
         remarks: tellWords,
-        phone:this.addrList[0].subtitle,
-        orderNumber:orderId,
+        phone: this.addrList[0].subtitle,
+        orderNumber: orderId
       };
       api
         .post("/php-ci/index.php/test/add_order", params)
