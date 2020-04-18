@@ -1,11 +1,8 @@
 <template>
   <div class="mainbox">
-    <div class="header">
-      <div class="title">选择发件地址</div>
-    </div>
-    <div class="back" @click="back">
-      <i class="el-icon-arrow-left" style="width:20px;"></i>
-    </div>
+    <mc-header back>
+      <span slot="center" class="text-bold">选择收件地址</span>
+    </mc-header>
     <div
       class="adressItem"
       v-for="(item, index) in addressList"
@@ -19,7 +16,7 @@
       </div>
     </div>
     <div class="footer" @click="addAddress">
-      <div>添加收货地址</div>
+      <div>添加收件地址</div>
     </div>
   </div>
 </template>
@@ -27,11 +24,12 @@
 <script>
 import api from "@/util/api";
 import store from "@/util/store";
+import McHeader from "@/components/header";
 
 export default {
+  components: { McHeader },
   data() {
     return {
-      msg: "",
       addressList: []
     };
   },
@@ -39,15 +37,14 @@ export default {
     this.getList();
   },
   methods: {
-    back() {
-      this.$router.go(-1)
-    },
     addAddress() {
-      this.$router.push({ path: "./address" });
+      this.$router.push("address");
     },
     chooseAddress(item) {
-      store.setSession("collectmsg",JSON.stringify(item));
-      this.$router.go(-1)
+      // TODO
+      store.setSession("collectmsg", JSON.stringify(item));
+      this.$store.commit("updateReceiverInfo", item);
+      this.$router.back();
     },
     getList() {
       api.post("/php-ci/index.php/test/address").then(res => {

@@ -7,51 +7,10 @@
     <div class="logo">
       <img :src="paisonglogo" />
     </div>
-
-    <mc-flex
-      align="center"
-      style="margin: 0rem .5rem;border-radius:.2rem;padding:.5rem 0rem;"
-      v-for="item in addrList"
-      :key="item.name"
-      @click="$router.push(item.router)"
-    >
-      <span class="icon" :style="{backgroundColor:item.bg}">{{item.flag}}</span>
-      <mc-flex column style="margin-left:1rem;border-bottom: 1px solid #ededed;flex:1;">
-        <mc-flex>
-          <span>{{item.title}}</span>
-          <span>{{item.subtitle}}</span>
-        </mc-flex>
-        <span style="color: #a9a9a9;font-size:.5rem;margin:.3rem 0rem;">{{item.tip}}</span>
-      </mc-flex>
-    </mc-flex>
-
-    <div v-for="item in objectInfo" :key="item.name">
+    <order-address ref="addr"></order-address>
+    <div v-for="item in cellList" :key="item.name">
       <card-cell :item="item"></card-cell>
-
-      <!--       
-      <mc-flex
-        justify="space-between"
-        style="margin: 0rem .5rem;padding:.5rem;"
-        v-if="item.type===0"
-        @click="item.handler"
-      >
-        <span style="color:#747474">{{item.title}}</span>
-        <mc-flex>
-          <span style="font-size:.5rem;margin: 0rem .5rem;">{{item.value}}</span>
-          <i class="el-icon-arrow-right"></i>
-        </mc-flex>
-      </mc-flex>
-      <mc-flex column v-else style="margin: 0rem .5rem;padding:.5rem;">
-        <span style="color:#747474;margin:.5rem 0rem;">{{item.title}}</span>
-        <textarea rows="4" style="width:90%;" v-model="item.value"></textarea>
-      </mc-flex>-->
     </div>
-    <popup-picker
-      ref="aptTime"
-      :slots="appointmentTimeSlot"
-      title="预约上门时间"
-      @ok="appointmentTimeChange"
-    ></popup-picker>
     <popup-picker ref="valAdded" :slots="valueAddedSlot" title="增值服务" @ok="valueAddedChange"></popup-picker>
 
     <div class="footer">
@@ -59,10 +18,8 @@
         <div>合计{{ totalMarks }}元</div>
         <div class="label">基础价格7元</div>
       </div>
-      <div @click="getOrder">立即下单</div>
+      <div @click="place_orders">立即下单</div>
     </div>
-
-    <mc-success :msg="msg" v-if="isShow"></mc-success>
   </div>
 </template>
 
@@ -74,7 +31,9 @@ import McFlex from "@comp/flex";
 import PopupPicker from "@comp/popup-picker";
 import store from "@/util/store";
 import api from "@/util/api";
+import OrderAddress from "@comp/order-address";
 import CardCell from "@comp/card-cell";
+import util from "@/util/index";
 
 export default {
   components: {
@@ -83,55 +42,120 @@ export default {
     McSuccess,
     McFlex,
     PopupPicker,
+    OrderAddress,
     CardCell
   },
   data() {
     return {
       paisonglogo: require("@/assets/paisonglogo.jpg"),
-      addrList: [
+      valueAddedSlot: [
         {
-          name: "sendmsg",
-          flag: "寄",
-          title: "从哪里寄？",
-          subtitle: "",
-          tip: "点击选择寄件人信息",
-          bg: "#3478f6",
-          router: "sendAddress"
-        },
-        {
-          name: "collectmsg",
-          flag: "收",
-          title: "寄到哪里？",
-          subtitle: "",
-          tip: "点击选择收件人信息",
-          bg: "#ebc95d",
-          router: "arriveAddress"
+          flex: 1,
+          values: ["2元", "5元", "10元", "50元"]
         }
-      ],
-      objectInfo: [
+      ]
+    };
+  },
+
+  mounted() {},
+  methods: {
+    valueAddedChange(values) {
+      this.$store.commit("updateValueAdded", values[0]);
+    },
+    place_orders() {
+      const timestamp = new Date().getTime();
+      const rid = `${Math.random() * 100000}`.substring(0, 5);
+      let orderId = `tsp${timestamp}rid${rid}`;
+
+      const { totalMarks } = this;
+      const { tellWords, goodsinfo } = this.cellInfo;
+      const sendmsg = `${this.senderInfo.addr} ${this.senderInfo.gate}`;
+      const collectmsg = `${this.receiverInfo.addr} ${this.receiverInfo.gate}`;
+      const params = {
+        title: goodsinfo,
+        provenance: sendmsg,
+        destination: collectmsg,
+        price: totalMarks,
+        remarks: tellWords,
+        phone: this.receiverInfo.phone,
+        orderNumber: orderId
+      };
+      const empty = util.check_empty(params);
+      if (empty) {
+        this.$message({
+          message: "您有信息未填写",
+          type: "error",
+          duration: 1000
+        });
+        return;
+      }
+      api
+        .post("/php-ci/index.php/test/add_order", params)
+        .then(res => {
+          this.$message({
+            message: "下单成功",
+            type: "success",
+            duration: 1000
+          });
+          this.$store.dispatch("initOrderInfo");
+          this.$router.push("order");
+        })
+        .catch(err => {
+          this.$message({
+            message: "下单失败,请稍后再试",
+            type: "error",
+            duration: 1000
+          });
+        });
+    }
+  },
+  computed: {
+    senderInfo() {
+      return this.$store.state.senderInfo;
+    },
+    receiverInfo() {
+      return this.$store.state.receiverInfo;
+    },
+    totalMarks() {
+      const { valueAdded } = this;
+      const { number } = this.itemInfo;
+      return 7 + util.get_number(valueAdded) + util.get_number(number);
+    },
+    itemInfo() {
+      return this.$store.state.itemInfo;
+    },
+    valueAdded() {
+      return this.$store.state.valueAdded;
+    },
+    remark() {
+      return this.$store.state.remark;
+    },
+    cellInfo() {
+      return this.cellList.reduce((acc, cur) => {
+        acc[cur.name] = cur.value;
+        return acc;
+      }, {});
+    },
+    cellList() {
+      const goodsinfo_empty = util.check_empty(this.itemInfo);
+      const goodsinfo_value = goodsinfo_empty
+        ? ""
+        : `${this.itemInfo.goods} , ${this.itemInfo.number}`;
+      return [
         {
           type: 0,
           title: "物品信息",
           name: "goodsinfo",
-          value: "",
+          value: goodsinfo_value,
           handler: () => {
             this.$router.push("ItemInformation");
           }
         },
-        // {
-        //   type: 0,
-        //   title: "预约上门时间",
-        //   name: "saleType",
-        //   value: "",
-        //   handler: () => {
-        //     this.$refs.aptTime.show = true;
-        //   }
-        // },
         {
           type: 0,
           title: "增值服务",
           name: "money",
-          value: "",
+          value: this.valueAdded,
           handler: () => {
             this.$refs.valAdded.show = true;
           }
@@ -140,152 +164,10 @@ export default {
           type: 1,
           title: "对小哥说",
           name: "tellWords",
-          value: "",
+          value: this.remark,
           handler: () => {}
         }
-      ],
-
-      msg: "下单成功！",
-      valueAddedSlot: [
-        {
-          flex: 1,
-          values: ["2元", "5元", "10元", "50元"]
-        }
-      ],
-      appointmentTimeSlot: [
-        {
-          flex: 1,
-          values: ["今天", "明天", "后天"],
-          textAlign: "center"
-        },
-        {
-          divider: true,
-          content: "-"
-        },
-        {
-          flex: 1,
-          values: [
-            "08:00-10:00",
-            "10:00-12:00",
-            "12:00-14:00",
-            "14:00-16:00",
-            "16:00-16:00"
-          ],
-          textAlign: "center"
-        }
-      ],
-      isShow: false //成功的弹框 显隐
-    };
-  },
-
-  mounted() {
-    this.init_object_info();
-    this.get_address();
-  },
-  methods: {
-    init_object_info() {
-      const goodsinfo = store.getSession("goodsinfo");
-      this.set_object_info("goodsinfo", goodsinfo);
-    },
-    set_object_info(name, value) {
-      for (const item of this.objectInfo) {
-        if (item.name === name) {
-          item.value = value;
-          break;
-        }
-      }
-    },
-    get_object_info() {
-      const temp = {};
-      for (const item of this.objectInfo) {
-        temp[item.name] = item.value;
-      }
-      return temp;
-    },
-    get_address() {
-      const sendmsg = store.getSession("sendmsg");
-      const collectmsg = store.getSession("collectmsg");
-      if (sendmsg) {
-        const send_addr = this.addrList[0];
-        send_addr.title = sendmsg.name;
-        send_addr.subtitle = sendmsg.phone;
-        send_addr.tip = sendmsg.addr + sendmsg.gate;
-      }
-
-      if (collectmsg) {
-        const arrive_addr = this.addrList[1];
-        arrive_addr.title = collectmsg.name;
-        arrive_addr.subtitle = collectmsg.phone;
-        arrive_addr.tip = collectmsg.addr + sendmsg.gate;
-      }
-    },
-    get_addr_list() {
-      const temp = {};
-      for (const item of this.addrList) {
-        temp[item.name] = item.tip;
-      }
-      return temp;
-    },
-    back() {
-      this.$router.back();
-    },
-    appointmentTimeChange(values) {
-      this.set_object_info("saleType", values[0] + values[1]);
-    },
-    valueAddedChange(values) {
-      this.set_object_info("money", values[0]);
-    },
-    getOrder() {
-      let currDate = new Date();
-      let year = currDate.getFullYear();
-      let month =
-        currDate.getMonth() + 1 < 10
-          ? "0" + (currDate.getMonth() + 1)
-          : currDate.getMonth() + 1;
-      let day =
-        currDate.getDate() < 10 ? "0" + currDate.getDate() : currDate.getDate();
-      let date = year + month + day;
-      let timestamp = Date.parse(currDate);
-      let orderId = date + timestamp;
-
-      const { totalMarks } = this;
-      const { tellWords, goodsinfo } = this.get_object_info();
-      const { sendmsg, collectmsg } = this.get_addr_list();
-      const params = {
-        title: goodsinfo,
-        provenance: sendmsg,
-        destination: collectmsg,
-        price: totalMarks,
-        remarks: tellWords,
-        phone: this.addrList[0].subtitle,
-        orderNumber: orderId
-      };
-      api
-        .post("/php-ci/index.php/test/add_order", params)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      this.isShow = true;
-      setTimeout(() => {
-        this.isShow = false;
-        this.$router.push("order");
-      }, 1000);
-      store.clearSession();
-    }
-  },
-  computed: {
-    totalMarks() {
-      let totalmoney = 7;
-      const { money } = this.get_object_info();
-      if (money) {
-        totalmoney = parseFloat(money) + parseFloat(totalmoney);
-      } else {
-        totalmoney = 7;
-      }
-      return parseFloat(totalmoney);
+      ];
     }
   }
 };
@@ -298,27 +180,6 @@ export default {
     width: 100%;
   }
 }
-.icon {
-  font-size: 28px;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  box-sizing: border-box;
-  padding-top: 10px;
-  background-color: #3478f6;
-  color: #fff;
-  border-radius: 60px;
-  margin-left: 20px;
-}
-
-textarea {
-  width: 100%;
-  border-radius: 5px;
-  background-color: rgba(241, 241, 241, 0.98);
-  padding: 10px;
-  resize: none;
-}
-
 .footer {
   position: fixed;
   bottom: 0;

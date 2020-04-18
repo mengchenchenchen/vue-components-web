@@ -1,7 +1,6 @@
 <template>
   <div class="mainbox">
-    <mc-header bg="#1a489d" :size="40" padding="15px">
-      <i slot="left" class="el-icon-arrow-left" @click="back"></i>
+    <mc-header back>
       <span slot="center" class="text-bold">物品类型</span>
     </mc-header>
     <div class="classifyBox">
@@ -43,6 +42,7 @@
 <script>
 import McHeader from "@/components/header";
 import store from "@/util/store";
+import util from "@/util/index";
 
 export default {
   components: {
@@ -51,37 +51,56 @@ export default {
   data() {
     return {
       classifyList: ["食品", "电子商品", "化妆品", "衣物", "文件票件", "其他"],
-      isactive:-1, // 点击选择class
+      isactive: -1, // 点击选择class
       number: 1,
-      goods:'',
+      goods: ""
     };
   },
   methods: {
-    back() {
-      window.history.go(-1)
-    },
     chooseClassify(item, index) {
       this.isactive = index;
       this.goods = item;
     },
     min() {
       if (this.number <= 0) {
-        alert("不能小于0kg!");
+        this.$message({
+          message: "不能小于0kg!",
+          type: "error",
+          duration: 1000
+        });
       } else {
         this.number--;
       }
     },
     add() {
       if (this.number >= 10) {
-        alert("不能小于10kg!");
+        this.$message({
+          message: "不能小于10kg!",
+          type: "error",
+          duration: 1000
+        });
       } else {
         this.number++;
       }
     },
     sure() {
-      let itemInformation = this.goods +','+ this.number
-      store.setSession("goodsinfo",itemInformation);
-      window.history.go(-1)
+      // TODO delete
+      let itemInformation = this.goods + "," + this.number;
+      // TODO delete
+      store.setSession("goodsinfo", itemInformation);
+      const { goods, number } = this;
+      const payload = { goods, number };
+      const empty = util.check_empty(payload);
+      if (empty) {
+        this.$message({
+          message: "您有信息未填写",
+          type: "error",
+          duration: 1000
+        });
+      } else {
+        this.$store.commit("updateItemInfo", payload);
+        this.$router.back();
+      }
     }
   }
 };
@@ -132,11 +151,11 @@ export default {
   .danger {
     padding: 30px;
     font-size: 30px;
-    .danger-title{
+    .danger-title {
       font-size: 40px;
       margin-bottom: 20px;
     }
-    .info{
+    .info {
       font-size: 36px;
       line-height: 50px;
     }
