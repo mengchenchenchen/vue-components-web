@@ -18,5 +18,7 @@ export default {
 .text-bold {
   font-weight: bold;
 }
-
+.mt-2 {
+  margin-top: 2rem;
+}
 </style>
