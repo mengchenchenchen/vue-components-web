@@ -9,15 +9,15 @@
       <form>
         <input type="text" placeholder="请输入手机号" v-model="phoneVal" ref="val" style="color:white" />
         <br />
-        <input type="text" placeholder="密码" v-model="pwd" ref="val1" style="color:white" />
+        <input type="password" placeholder="密码" v-model="pwd" ref="val1" style="color:white" />
         <br />
         <div class="chooseButton">
           <input type="radio" id="one" value="1" v-model="permissions" />
           <label for="one">个人用户</label>
           <input type="radio" id="two" value="2" v-model="permissions" />
           <label for="two">派送员</label>
-          <input type="radio" id="two" value="3" v-model="permissions" />
-          <label for="two">管理员</label>
+          <input type="radio" id="three" value="3" v-model="permissions" />
+          <label for="three">管理员</label>
         </div>
         <input type="button" value="登录" @click="login" />
       </form>
@@ -33,50 +33,70 @@
 
 <script>
 import api from "@/util/api";
+import util from "@/util/index";
 export default {
   data() {
     return {
       phoneVal: "",
       pwd: "",
       isShow: false,
-      permissions: "" //选择的按钮
+      permissions: "1" //选择的按钮
     };
   },
   mounted() {},
   methods: {
-     login() {
-      let params = {
+    login() {
+      const params = {
         telephone: this.phoneVal,
         password: this.pwd,
         permissions: this.permissions
       };
       if (!/^1[3456789]\d{9}$/.test(this.phoneVal)) {
-        alert("手机号码有误，请重填");
-        return;
-      } else {
-
-        api.post("/php-ci/index.php/test/login", params).then(res => {
-          if (res.data.ret == "200") {
-            localStorage.phone = this.phoneVal;
-            localStorage.auth = "true";
-            if (this.permissions === '1') {
-              this.$router.push("/AppointmentTime");
-            } else if (this.permissions === '2') {
-              this.$router.push("Riderindex");
-            } else if (this.permissions === '3') {
-              this.$router.push("/adminIndex");
-            }
-          } else {
-            alert("没有找到你的账户，请先注册！");
-          }
+        this.$message({
+          message: "手机号码有误，请重填",
+          type: "error",
+          duration: 1000
         });
+        this.$store.dispatch("initUserInfo");
+        return;
       }
+      const empty = util.check_empty(params);
+      if (empty) {
+        this.$message({
+          message: "您有信息未填写",
+          type: "error",
+          duration: 1000
+        });
+        this.$store.dispatch("initUserInfo");
+        return;
+      }
+      api.post("/php-ci/index.php/test/login", params).then(res => {
+        if (res.data.ret == "200") {
+          localStorage.phone = this.phoneVal;
+          localStorage.auth = "true";
+          this.$store.commit("updateUserInfo", { phone: this.phoneVal });
+          if (this.permissions === "1") {
+            this.$router.push("/appointment-time");
+          } else if (this.permissions === "2") {
+            this.$router.push("Riderindex");
+          } else if (this.permissions === "3") {
+            this.$router.push("/adminIndex");
+          }
+        } else {
+          this.$message({
+            message: "没有找到你的账户，请先注册！",
+            type: "error",
+            duration: 1000
+          });
+          this.$store.dispatch("initUserInfo");
+        }
+      });
     },
     toSet() {
-      let _this = this;
+      const { permissions } = this;
       this.$router.push({
         path: "./register",
-        query: { permissions: _this.permissions }
+        query: { permissions }
       });
     }
   }

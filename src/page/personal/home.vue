@@ -5,7 +5,7 @@
     </mc-header>
 
     <div class="logo">
-      <img :src="bgcimg" alt />
+      <img :src="bgcimg" />
     </div>
 
     <mc-flex wrap justify="center">
@@ -72,9 +72,8 @@ export default {
     };
   },
   computed: {
-    // ...mapState(["count", "name"]),
-    count(){
-      return this.$store.state.count
+    user() {
+      return this.$store.state.user;
     }
   },
   mounted() {},
@@ -82,12 +81,8 @@ export default {
     goto(path) {
       this.$router.push(path);
     },
-    handleCount(){
-      this.$store.commit('add',{name:'zoe'})
-    }
   }
 };
-
 </script>
 
 <style lang="less">
