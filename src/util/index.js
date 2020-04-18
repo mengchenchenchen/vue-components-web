@@ -12,5 +12,12 @@ export default {
       }
     }
     return false;
+  },
+  get_number(str) {
+    const result = parseInt(str);
+    if (isNaN(result)) {
+      return 0;
+    }
+    return result;
   }
 };
