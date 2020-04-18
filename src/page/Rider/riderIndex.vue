@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     tabChange(val) {
-      console.log(val);
+      // console.log(val);
       if (val < 2) {
         // one
         this.get_order();
@@ -86,10 +86,11 @@ export default {
       });
     },
     get_appoint_order() {
+      // let phone = localStorage.getItem('')
       api.post("/php-ci/index.php/test/appoint_order").then(res => {
         if (res.status === 200) {
           this.appointOrder = res.data;
-          console.log(this.appointOrder);
+          // console.log(this.appointOrder);
         }
       });
     },

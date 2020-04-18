@@ -7,7 +7,15 @@
       <form>
         <input type="text" placeholder="输入昵称" class="sendName" v-model="nameValue" />
         <input type="text" placeholder="输入手机号" v-model="phoneNum" />
-        <input type="text" placeholder="设置密码" v-model="pwd" />
+        <input type="password" placeholder="设置密码" v-model="pwd" />
+        <div class="chooseButton">
+          <input type="radio" id="one" value="1" v-model="permissions" />
+          <label for="one">个人用户</label>
+          <input type="radio" id="two" value="2" v-model="permissions" />
+          <label for="two">派送员</label>
+          <input type="radio" id="three" value="3" v-model="permissions" />
+          <label for="three">管理员</label>
+        </div>
         <el-button type="text" @click="setSuccess" class="success">完成注册</el-button>
       </form>
     </div>
@@ -28,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    this.permissions = this.$route.query.permissions;
+  
   },
   methods: {
     back() {
@@ -54,7 +62,7 @@ export default {
           alert("完成注册！");
           localStorage.phone = this.phoneNum;
           if (this.permissions == 1) {
-            this.$router.push("./Index");
+            this.$router.push("./home");
           } else if (this.permissions == 2) {
             this.$router.push("Riderindex");
           } else if (this.permissions == 3) {
@@ -92,7 +100,7 @@ export default {
     left: 0;
     text-align: center;
     font-size: 34px;
-    input {
+    &>input {
       text-align: center;
       padding: 10px;
       width: 80%;
@@ -117,6 +125,13 @@ export default {
       border: none;
       color: #e7b800;
       background-color: transparent;
+    }
+    .chooseButton {
+      input{
+
+      }
+      color: #757575;
+      margin-bottom: 30px; 
     }
     .success {
       width: 80%;

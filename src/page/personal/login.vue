@@ -76,12 +76,12 @@ export default {
           localStorage.auth = "true";
           this.$store.commit("updateUserInfo", { phone: this.phoneVal });
           if (this.permissions === "1") {
-            this.$router.push("/appointment-time");
+            this.$router.push("/home");
           } else if (this.permissions === "2") {
             this.$router.push("Riderindex");
           } else if (this.permissions === "3") {
             this.$router.push("/adminIndex");
-          }
+          } 
         } else {
           this.$message({
             message: "没有找到你的账户，请先注册！",
@@ -93,10 +93,8 @@ export default {
       });
     },
     toSet() {
-      const { permissions } = this;
       this.$router.push({
         path: "./register",
-        query: { permissions }
       });
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mc-header>
+    <mc-header back> 
       <span slot="center" class="text-bold">预约时间</span>
     </mc-header>
     <input-text

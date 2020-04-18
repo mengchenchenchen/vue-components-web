@@ -5,8 +5,8 @@
       <span slot="center" class="text-bold" style="position:relative;left:0.5rem;">物流详情</span>
     </mc-header>
     <mc-flex style="margin:1rem .5rem;">
-      <img :src="watch" style="width:5rem;flex:3 3 auto;" />
-      <mc-flex column style="flex:7 7 auto;">
+      <img :src="watch" style="width:4rem;flex:3 3 auto;" />
+      <mc-flex column style="flex:7 7 auto; margin-left:2rem;">
         <span style="margin-top:.8rem .5rem;font-size:1rem;" class="text-bold">{{item.title}}</span>
         <span style="color:#888;font-size:.8rem;">订单号:{{item.id}}</span>
       </mc-flex>
@@ -44,7 +44,7 @@ export default {
               point: [117.186728, 34.202541]
             },
             {
-              content: "扬州",
+              content: "南京",
               timestamp: "2020-03-21",
               type:'warning',
               point: [119.431369, 32.400225]
@@ -68,7 +68,7 @@ export default {
   },
   data() {
     return {
-      watch: require("@/assets/watch.jpg")
+      watch: require("@/assets/order.jpg")
     };
   },
   computed: {

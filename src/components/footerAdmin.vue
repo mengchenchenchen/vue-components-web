@@ -16,8 +16,10 @@
 
 <script>
 import home_icon_off from "@/assets/home_icon_off.png";
+import cart_icon_off from "@/assets/cart_icon_off.png";
 import my_icon_off from "@/assets/my_icon_off.png";
 import home_icon_on from "@/assets/home_icon_on.png";
+import cart_icon_on from "@/assets/cart_icon_on.png";
 import my_icon_on from "@/assets/my_icon_on.png";
 import McFlex from "@/components/flex";
 export default {
@@ -26,16 +28,16 @@ export default {
     return {
       tabs: [
         {
-          text: "首页",
-          selected: home_icon_on,
-          unselect: home_icon_off,
+          text: "订单",
+          selected: cart_icon_on,
+          unselect: cart_icon_off,
           route: "adminIndex"
         },
         {
           text: "我的",
           selected: my_icon_on,
           unselect: my_icon_off,
-          route: "adminMine"
+          route: "AdminMine"
         }
       ]
     };

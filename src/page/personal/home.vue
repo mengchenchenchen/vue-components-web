@@ -32,6 +32,7 @@ import kuaidiyuan from "@/assets/kuaidiyuan.png";
 import search from "@/assets/search_logo.png";
 import jijian from "@/assets/jijian.png";
 import dingdan from "@/assets/dingdan.png";
+import time from "@/assets/time.png";
 import { mapState } from "vuex";
 export default {
   components: {
@@ -45,9 +46,15 @@ export default {
       bgcimg: require("@/assets/bgcimg.jpg"),
       optionList: [
         {
+          img: time,
+          title: "预约时间",
+          info: "预约上门 轻松寄",
+          value: "appointment-time"
+        },
+        {
           img: kuaidiyuan,
           title: "快递员上门",
-          info: "安心下单 闪电送达",
+          info: "安心下单 闪电达",
           value: "customerIndex"
         },
         {
@@ -56,18 +63,18 @@ export default {
           info: "查找寄件 更快捷",
           value: "scanning"
         },
-        {
-          img: jijian,
-          title: "批量寄件",
-          info: "批量寄件 更急速",
-          value: "batchSend"
-        },
+        // {
+        //   img: jijian,
+        //   title: "批量寄件",
+        //   info: "批量寄件 更急速",
+        //   value: "batchSend"
+        // },
         {
           img: dingdan,
-          title: "寄件订单",
-          info: "近期订单 轻松查",
+          title: "查看订单",
+          info: "查看订单 了解详情",
           value: "order"
-        }
+        },
       ]
     };
   },

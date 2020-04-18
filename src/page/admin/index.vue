@@ -13,17 +13,24 @@
       </div>
     </div>
     <div v-if="isActive == 1">
-        <div class="riderNum" v-for="item in riderNum" :key="item.id">
-            <div>{{item.name}}</div>
-            <div>{{item.phone}}</div>
+      <div class="riderNum" v-for="(item,n) in riderNum" :key="item.id" @click="show(n)">
+        <div class="rider_info">
+          <div>{{item.name}}</div>
+          <div>{{item.phone}}</div>
         </div>
+        <div class="goods_list" :class="{goods_listShow:n == index}">
+          <div v-for="(i,index) in temp" :key="index">
+			<order-item :item="i"></order-item>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- <footerAdmin></footerAdmin> -->
+    <footerAdmin></footerAdmin>
   </div>
 </template>
 
 <script>
-// import footerAdmin from "@/components/footerAdmin";
+import footerAdmin from "@/components/footerAdmin";
 import OrderItem from "@/components/order-item";
 
 import api from "@/util/api";
@@ -31,7 +38,7 @@ import api from "@/util/api";
 export default {
   name: "index",
   components: {
-    // footerAdmin,
+    footerAdmin,
     OrderItem
   },
   data() {
@@ -43,8 +50,9 @@ export default {
       goods: true,
       input: true,
       temp: [],
-      riderNum:[],
-      activeNames: ["1"]
+      riderNum: [],
+      activeNames: ["1"],
+      index: -1,
     };
   },
   mounted() {
@@ -56,14 +64,21 @@ export default {
       api.post("/php-ci/index.php/test/order").then(res => {
         if (res.status === 200) {
           this.temp = res.data;
-          // console.log(this.temp);
+        //   console.log(this.temp);
         } else {
           alert("错误！");
         }
       });
     },
+    show(index) {
+      if (this.index != index) {
+        this.index = index;
+      } else if (this.index == index) {
+        this.index = -index;
+      }
+    },
     handleChange(val) {
-      console.log(val);
+      // console.log(val);
     },
     get_rider() {
       api.post("/php-ci/index.php/test/rider_name").then(res => {
@@ -75,7 +90,8 @@ export default {
           alert("错误！");
         }
       });
-    },
+      api.post;
+    }
   }
 };
 </script>
@@ -103,12 +119,23 @@ export default {
       color: #402fdb;
     }
   }
-  .riderNum{
-    display: flex;
-    justify-content: space-around;
-    font-size: 36px;
-    &>div{
-      padding: 20px 30px;
+  .riderNum {
+    .rider_info {
+      display: flex;
+      justify-content: space-around;
+      font-size: 36px;
+      border: 1px solid #e2e2e2;
+      & > div {
+        padding: 20px 30px;
+      }
+    }
+    .goods_list {
+		width: 100%;
+      display: none;
+    }
+    .goods_listShow {
+		width: 100%;
+      display: inline-block;
     }
   }
 }
