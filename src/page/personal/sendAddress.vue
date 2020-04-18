@@ -41,11 +41,13 @@ export default {
   },
   methods: {
     addAddress() {
-      this.$router.push({ path: "./address" });
+      this.$router.push("address");
     },
     chooseAddress(item) {
+      // TODO 之后删除 store 相关的数据,使用 vuex
       store.setSession("sendmsg", item);
-      this.$router.back()
+      this.$store.commit("updateSenderInfo", item);
+      this.$router.back();
     },
     getList() {
       api.post("/php-ci/index.php/test/address").then(res => {

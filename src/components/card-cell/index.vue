@@ -13,7 +13,12 @@
   </mc-flex>
   <mc-flex column v-else style="margin: 0rem .5rem;padding:.5rem;">
     <span style="color:#747474;margin:.5rem 0rem;">{{item.title}}</span>
-    <textarea rows="4" style="width:90%;" v-model="item.value"></textarea>
+    <textarea
+      rows="4"
+      style="width:90%;border:1px solid #eee;outline:0;"
+      v-model="item.value"
+      @input="handleTextInput"
+    ></textarea>
   </mc-flex>
 </template>
 <script>
@@ -31,7 +36,11 @@ export default {
     return {};
   },
   computed: {},
-  methods: {}
+  methods: {
+    handleTextInput(ev) {
+      this.$store.commit("updateRemake", ev.target.value);
+    }
+  }
 };
 </script>
 <style scoped>

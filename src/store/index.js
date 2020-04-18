@@ -10,11 +10,25 @@ const store = new Vuex.Store({
       address: ""
     },
     senderInfo: {
+      id: "",
       addr: "",
       gate: "",
       name: "",
       phone: ""
-    }
+    },
+    receiverInfo: {
+      id: "",
+      addr: "",
+      gate: "",
+      name: "",
+      phone: ""
+    },
+    itemInfo: {
+      goods: "",
+      number: ""
+    },
+    valueAdded: "",
+    remark: ""
   },
   mutations: {
     updateUserInfo(state, payload) {
@@ -26,16 +40,29 @@ const store = new Vuex.Store({
     },
     updateSenderInfo(state, payload) {
       Object.assign(state.senderInfo, payload);
-      storeUtil.setDataToLocal(state, "senderInfo");
     },
-    getSenderInfo(state) {
-      storeUtil.getDataFromLocal(state, "senderInfo");
+    updateReceiverInfo(state, payload) {
+      Object.assign(state.receiverInfo, payload);
+    },
+    updateItemInfo(state, payload) {
+      Object.assign(state.itemInfo, payload);
+    },
+    updateValueAdded(state, payload) {
+      state.valueAdded = payload;
+    },
+    updateRemake(state, payload) {
+      state.remark = payload;
     }
   },
   actions: {
     initUserInfo(context) {
       context.commit("updateUserInfo", { name: "", phone: "", address: "" });
       localStorage.auth = "false";
+    },
+    initOrderInfo(context) {
+      context.commit("updateItemInfo", { goods: "", number: "" });
+      context.commit("updateValueAdded", "");
+      context.commit("updateRemake", "");
     }
   }
 });
