@@ -52,6 +52,7 @@ export default {
       .post("/php-ci/index.php/test/user_info", { telephone: phone })
       .then(res => {
         this.username = res.data[0].name;
+        this.phone = res.data[0].telephone;
       });
   },
   methods: {

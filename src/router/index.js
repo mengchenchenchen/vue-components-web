@@ -168,12 +168,11 @@ router.beforeEach((to, from, next) => {
   // console.log(from);
   const auth = localStorage.getItem("auth");
 
-  if (to.path === "/login" || auth === "true") {
+  if (to.path === "/login" || auth === "true" || to.path === "/register") {
     next();
     return;
   }
   next("/login");
-  // next()
 });
 
 export default router;

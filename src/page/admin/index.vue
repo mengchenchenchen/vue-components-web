@@ -71,10 +71,11 @@ export default {
       });
     },
     show(index) {
+		// console.log(index)
       if (this.index != index) {
         this.index = index;
       } else if (this.index == index) {
-        this.index = -index;
+        this.index = index + 10;
       }
     },
     handleChange(val) {

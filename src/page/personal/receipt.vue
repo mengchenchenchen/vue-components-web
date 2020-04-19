@@ -24,8 +24,8 @@ export default {
   components: { McHeader ,McSuccess},
   data() {
     return {
-        item:'',
-      msg:'评价成功！',
+      item:'',
+      msg:'接收成功！',
       isShow: false //成功的弹框 显隐
     };
   },

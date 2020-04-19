@@ -37,7 +37,7 @@ export default {
       return temp;
     },
     handle(item){
-      console.log(typeof(item) )
+      // console.log(typeof(item) )
       if(item.status == 0){
         this.$router.push({
           path: '/receipt',
@@ -55,7 +55,7 @@ export default {
         })
       }
       if(item.status == 2){
-        this.$router.push('/distributionDetails')
+        alert('此单为异常单，请联系客服!')
       }
       if(item.status == 3){
         this.$router.push({

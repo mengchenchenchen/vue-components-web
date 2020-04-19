@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       statusList: [
-        { label: "待接单", value: 0 },
+        { label: "等待接单", value: 0 },
         { label: "送货中", value: 1 },
         { label: "异常单", value: 2 },
         { label: "去评价", value: 3 }

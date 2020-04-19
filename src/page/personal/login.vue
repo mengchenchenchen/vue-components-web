@@ -93,9 +93,8 @@ export default {
       });
     },
     toSet() {
-      this.$router.push({
-        path: "./register",
-      });
+      this.$router.push({ path:'/register'  })
+      // this.$router.push("/register", () => {})
     }
   }
 };

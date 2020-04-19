@@ -51,7 +51,9 @@ export default {
     api
       .post("/php-ci/index.php/test/user_info", { telephone: phone })
       .then(res => {
+        console.log(res)
         this.username = res.data[0].name;
+        this.phone = res.data[0].telephone
       });
   },
   methods: {
